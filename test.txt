@@ -1,6 +1,0 @@
-cd ~
-nano ju.sh
-	#!/bin/bash
-	jupyter lab --ip="*" --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password="" &
-chmod +x ju.sh
-~/ju.sh
