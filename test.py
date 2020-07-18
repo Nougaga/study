@@ -1,13 +1,18 @@
-x = int(input())
-y = int(input())
+import sys
 
-if x>0:
-    if y>0:
-        print(1)
-    else:
-        print(4)
-else:
-    if y>0:
-        print(2)
-    else:
-        print(3)
+
+A = []
+B = []
+while True:
+    a,b = map(int,sys.stdin.readline().rstrip().split())
+    if (a==0 and b==0):
+        break
+    A.append(a)
+    B.append(b)
+
+i = 0
+length = len(A)
+while True:
+    print(A[i]+B[i])
+    
+
