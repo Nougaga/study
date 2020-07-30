@@ -1,9 +1,4 @@
 import sys
+# a,b = map(int,sys.stdin.readline().rstrip().split())
 
-
-while True:
-    try:
-        a,b = map(int,sys.stdin.readline().rstrip().split())
-        print(a+b)
-    except:
-        break
+N = int(sys.stdin.readline())
