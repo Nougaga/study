@@ -1,0 +1,98 @@
+---
+title: "200731-practice1"
+author: "Nougaga"
+date: '2020 7 31 '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### 1. 다음과 같은 벡터 객체를 생성하세요
+  1) 'R'문자가 5회 반복되도록 하여 벡터 변수 vec1 생성
+```{r}
+(vec1 <- rep('R',5))
+```
+  2) 1~10까지 3씩 커지는 연속된 정수를 vec2에 
+```{r}
+(vec2 <- seq(1, 10, by=3))
+```
+  3) 1~10까지 3씩 커지는 연속된 정수가 3회 반복되도록 vec3 생성
+```{r}
+(vec3 <- rep(seq(1, 10, by=3), 3))
+```
+  4) vec2, vec3을 포함하는 백터 변수 vec4 만들기
+```{r}
+(vec4 <- c(vec2, vec3))
+```
+  5) 25 ~ -15까지 5의 간격으로 seq()이용 벡터 생성
+```{r}
+(vec_with_seq <- seq(25, -15, by=-5))
+```
+  6) vec4에서 홀수번째 값들만 선택하여 vec5에 할당
+```{r}
+(vec5 <- vec4[c(seq(1,length(vec4),by=2))])
+```
+
+------
+
+#### 2. 다음과 같은 벡터를 칼럼으로 갖는 user 데이터프레임을 생성하고
+####    gender 변수를 이용하여 히스토그램 그려보세요(barplot())
+
+  + name : '최민수','유관순','이순신','김유신','홍길동'
+  
+  + age : 55,45,45,53,15
+  
+  + gender : 1,2,1,1,1
+  
+  + job : '연예인','학생','군인','직장인','무직'
+  
+  + sat : 3,4,2,5,5
+  
+  + grade : 'C','C','A','D','A'
+  
+  + total : 44.4, 28.5,43.5,NA,27.1
+
+```{r}
+user = data.frame(name=c('최민수','유관순','이순신','김유신','홍길동'),
+           age=c(55,45,45,53,15),
+           gender=c(1,2,1,1,1),
+           job=c('연예인','학생','군인','직장인','무직'),
+           sat=c(3,4,2,5,5),
+           grade=c('C','C','A','D','A'),
+           total=c(44.4, 28.5,43.5,NA,27.1))
+user$gender <- as.factor(user$gender)
+barplot(table(user$gender), main="gender 빈도")
+```
+
+------
+
+#### 3. 아래의 데이터로 데이터프레임 생성 후, 
+####    apply()함수를 적용하여 행/열 방향으로 조건에 맞게 통계량을 구해보세요
+
+  + kor : 90,85,90
+  
+  + eng : 70,85,75
+  
+  + mat : 86,92,88
+
+```{r}
+score = data.frame(kor=c(90,85,90),
+                   eng=c(70,85,75),
+                   mat=c(86,92,88))
+```
+조건1) 행/열 방향으로 각각 max() 적용, 최대값 구하기
+```{r}
+apply(score, 1, max)  # 행 기준
+apply(score, 2, max)  # 열 기준
+```
+  
+조건2) 행/열 방향 mean() 적용 평균을 구하여 소수점 2자리까지 표현하세요(셋째자리에서 반올림)
+```{r}
+round(apply(score, 1, mean),2)  # 행 기준
+round(apply(score, 2, mean),2)  # 열 기준
+```
+
+
+
