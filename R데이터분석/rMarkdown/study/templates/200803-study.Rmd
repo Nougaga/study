@@ -27,6 +27,9 @@ library(KoNLP)
 ```
 
 ### **1. 조건문**
+
+----------------------------
+
   + cf) 출력 함수 : print(), cat()
   
 print() | cat()
@@ -45,6 +48,9 @@ cat("첫 번째는 홀수=",print_test, "두 번째는 짝수=", print_test1)
 ```
 
 #### **if()**
+
+--------------
+
   + 형식 :  if(조건식) {참인 경우 처리문}
             else {거짓인 경우 처리문}
 
@@ -101,6 +107,9 @@ ifelse(score >=80, "great", "low")
 ```
 
 #### **which()**
+
+---------------
+
   + subsetting
   
   + vector 객체를 대상으로 특정 데이터를 검색하는 데에 사용
@@ -127,7 +136,12 @@ exam[which(exam$이름 == "유관순"),]
 subset(exam, 이름 == "유관순")
 ```
 ### **2. 반복문**
+
+-------------
+
 #### **for()**
+
+-------------
   + 형식 : for(변수 in 범위){실행문}
   
 ```{r eval=F}
@@ -182,18 +196,22 @@ for (n in 1:len){
 
 
 #### **while()**
+
+------------
+
   + 기본적으로 for()와 동일하나, 직접 반복 횟수를 결정해놓지 않고 블록 내에서 증감식을 이용해 종료 시점을 지정함
   + 형식: while(조건문){실행문}
 
 
-```{r}
+```{r eval=F}
 j <- 1
 while(j<5){
   print("남은 시험이 있습니다")
   j <- j+1
 }
 ```
-```{r}
+  + 남은 수량을 출력
+```{r eval=F}
 coffee <- 10
 
 while(T){
@@ -205,8 +223,123 @@ while(T){
   }
 }
 ```
+---------------
 
+---------------
 
+---------------
 
+#### User Defined Function
+
+  + 사용자의 input -> parameter로 이용하는 함수를 정의
+ex) 두 수의 덧셈
+```{r}
+add2 <- function(x,y){
+  res <- x + y
+  return(res)
+}
+
+add2(30,45)
+```
+  + 구구단을 출력하는 함수
+```{r eval=F}
+NineToNine <- function(N){
+  for (i in 2:N){
+    cat("** ",i,"단 **\n",sep="")
+    for (j in 1:9){
+      cat(i,"*",j,"=",i*j,"\n")
+    }
+    cat("\n")
+  }
+}
+
+NineToNine(9)
+```
+---------------
+
+---------------
+
+---------------
+
+```{r}
+library(rJava); library(KoNLP)
+seoul_data <- readLines(con='..\\..\\..\\data\\seoul.txt', encoding='UTF-8')
+
+# 명사 추출 -> KoNLP 패키지 이용
+sdata <- sapply(seoul_data, KoNLP::extractNoun, USE.NAMES = F)
+
+sdata2 <- unlist(sdata)
+
+# 불용어 제거
+sdata3 <- gsub("서울","",sdata2)
+sdata3 <- gsub("서울시","",sdata3)
+sdata3 <- gsub("박원순","",sdata3)
+sdata3 <- gsub("[0-9]+","",sdata3)
+sdata3 <- gsub("-","",sdata3)
+sdata3 <- gsub("?","",sdata3)
+sdata3 <- gsub(" ","",sdata3)
+sdata3 <- gsub("\\.","",sdata3)
+
+write(sdata3, "seoul_new.txt")
+sdata4 <- read.table("seoul_new.txt")
+
+# 빈도 확인
+wdcount <- head(sort(table(sdata4), decreasing=T),30)
+
+# 워드 클라우드 표현
+# install.packages(c('RColorBrewer','wordcloud'))
+library(RColorBrewer)
+library(wordcloud)
+# ?brewer.pal
+palette <- brewer.pal(8,"Dark2")
+
+wordcloud(names(wdcount),
+          freq=wdcount,
+          scale=c(5,0.5),
+          rot.per=0.25, min.freq=1,
+          random.order=F,random.color=T, colors=palette)
+
+# 사전 업데이트
+# buildDictionary(ext_dic=c("woorimalsam",'sejong'),
+#                 replace_usr_dic=F)
+```
+-----------------
+
+------------------
+
+------------------
+
+#### 인터넷에서 파일 불러오기
+```{r}
+# GDP_ranking <- read.csv(file="http://databank.worldbank.org/data/download/GDP_PPP.csv",
+#                         stringsAsFactors = F)
+GDP_ranking <- read.csv(file="..\\..\\..\\data\\GDP_PPP.csv",
+                        stringsAsFactors = F)
+GDP_ranking <<- GDP_ranking
+names(GDP_ranking)[1] <- "Country"
+names(GDP_ranking)[2] <- GDP_ranking[3,2]
+names(GDP_ranking)[4] <- GDP_ranking[3,4]
+names(GDP_ranking)[5] <- "GDP"  # paste(GDP_ranking[2,5], GDP_ranking[3,5])
+df <- GDP_ranking[-c(1:5),-c(3,6)]
+df$Ranking <- as.numeric(df$Ranking)
+df <- df[order(df$Ranking),]
+df <- head(df, 20)
+df$GDP <- gsub(",","",df$GDP)
+df$GDP <- gsub(" ","",df$GDP)
+df$GDP <- gsub("-","",df$GDP)
+df$GDP <- as.numeric(df$GDP)
+df$GDP_B <- df$GDP / 1000
+
+barplot(df$GDP_B,
+        main="2018년 국가별 GDP 순위(상위20개국)",
+        names.arg=df$Economy,
+        xlab='Nations',
+        ylab='unit($Billion)',
+        ylim=c(0,25000),
+        col=rainbow(20),
+        cex.names=0.8
+        )
+abline(h=c(5000,10000),col=c('darkgray','lightblue'),lty=c('dotdash','dotdash'))
+```
 
 
