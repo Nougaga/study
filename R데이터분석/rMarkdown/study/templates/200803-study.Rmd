@@ -1,0 +1,212 @@
+---
+title: "200803-study"
+author: "Nougaga"
+date: '2020 8 3 '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r eval=F}
+install.packages('multilinguer')
+library(multilinguer)
+install.packages(c('stringr',
+                   'hash',
+                   'tau',
+                   'Sejong',
+                   'RSQLite',
+                   'devtools'
+                   ),
+                 type='binary')
+install.packages('remotes')
+remotes::install_github('haven-jeon/KoNLP', upgrade = "never", 
+                        INSTALL_opts=c("--no-multiarch"))
+library(KoNLP)
+```
+
+### **1. 조건문**
+  + cf) 출력 함수 : print(), cat()
+  
+print() | cat()
+------------- | ------------- 
+변수의 값만 출력 가능 | 텍스트를 삽입해서 출력 가능
+하나의 변수만 출력 | 여러 변수 출력 가능
+
+
+```{r}
+# print(), cat()
+print_test <- c(1,5,7)
+print_test1 <- c(2,4,6)
+print(print_test, print_test1);cat(print_test, print_test1)
+# sprintf('test %d', print_test[2])
+cat("첫 번째는 홀수=",print_test, "두 번째는 짝수=", print_test1)
+```
+
+#### **if()**
+  + 형식 :  if(조건식) {참인 경우 처리문}
+            else {거짓인 경우 처리문}
+
+```{r}
+# 1) if() 함수
+x <- 10
+y <- 5
+z <- x*y
+
+if (x*y >= 40){   # 우선순위 : 산술 > 관계 > 논리
+  cat("x*y의 결과는 40 이상입니다.\n")
+  cat("x*y =",z,'\n')
+  print(z)
+}else{
+  cat("x*y의 결과는 40 미만입니다.", "x*y=",z,"\n")
+}
+```
+  + cf) scan()
+```{r}
+# score <- scan()   # 입력된 값을 담기
+score <- 85
+result <- "low"
+if (score >= 80){
+  result <- "Excellent"
+  print(result)
+}
+cat("your score is",score,", which is", result)
+```
+
+  + if ~ else if
+
+```{r}
+score <- 90
+if (score >= 90){
+  result = "A학점"
+}else if(score >= 80){
+  result = "B학점"
+}else if(score >= 70){
+  result = "C학점"
+}else if(score >= 60){
+  result = "D학점"
+}else{
+  result = "F학점"
+}
+cat("당신의 학점은", result)
+print(result)
+```
+
+  + ifelse(조건식, 참인 경우 처리문, 거짓인 경우 처리문)
+  
+```{r}
+score <- 95
+ifelse(score >=80, "great", "low")
+```
+
+#### **which()**
+  + subsetting
+  
+  + vector 객체를 대상으로 특정 데이터를 검색하는 데에 사용
+  + 조건식을 만족하는 경우 해당 벡터 원소의 인덱스를 반환
+  + 데이터 프레임에서 사용
+
+```{r}
+# df 생성
+no <- c(1:6)
+name <- c("홍길동","이순신", "강감찬", "유관순", "김유신", "고길동")
+score <- c(85,78,89,90,74,89)
+exam <- data.frame(학번=no, 이름=name, 성적=score)
+exam; exam[4,]
+
+# Boolean indexing
+exam$이름 == "유관순"
+exam[exam$이름 == "유관순",]
+
+# 조건을 만족하는 성분의 인덱스를 추출
+which(exam$이름 == "유관순")
+exam[which(exam$이름 == "유관순"),]
+
+# subsetting
+subset(exam, 이름 == "유관순")
+```
+### **2. 반복문**
+#### **for()**
+  + 형식 : for(변수 in 범위){실행문}
+  
+```{r eval=F}
+i <- c(1:10)
+d <- c()  # 빈 vector
+for (n in i){   # n in 1:length(i)
+  print(n*10)
+  print(n)
+  d[n] <- n*2   #d[1]=2, d[2]=4, ..., d[10]=20
+}
+```
+
+  + 1~30까지 짝수값만 출력하는 반복문
+  
+```{r eval=F}
+i <- c(1:30)
+for (n in i){
+  temp = i[n]
+  if (temp%%2 ==0){
+    print(temp)
+  }
+}
+```
+
+  + 1~20까지 짝수면 pass, 홀수면 *3해서 출력
+```{r eval=F}
+i <- c(1:20)
+for (n in i){
+  temp = i[n]
+  if (temp%%2 ==1){
+    print(temp*3)
+  }
+  # else next     # pass
+}
+```
+
+  + vector를 index로 사용: vector data의 사용
+  + score <- c(85,95,98), name <- c('홍길동', '이순신', '강감찬')일 때, 다음의 형태로 출력해보세요.
+  
+    홍길동 -> 85
+    이순신 -> 95
+    강감찬 -> 98
+
+```{r}
+score <- c(85,95,98); name <- c('홍길동', '이순신', '강감찬')
+len <- length(score)
+for (n in 1:len){
+  cat(name[n], "->", score[n],"\n")
+}
+```
+
+
+
+#### **while()**
+  + 기본적으로 for()와 동일하나, 직접 반복 횟수를 결정해놓지 않고 블록 내에서 증감식을 이용해 종료 시점을 지정함
+  + 형식: while(조건문){실행문}
+
+
+```{r}
+j <- 1
+while(j<5){
+  print("남은 시험이 있습니다")
+  j <- j+1
+}
+```
+```{r}
+coffee <- 10
+
+while(T){
+  cat("남은 커피는",coffee,"잔 입니다\n")
+  coffee = coffee -1
+  if (coffee == 0){
+    cat("커피가 없습니다\n판매를 종료합니다.")
+    break
+  }
+}
+```
+
+
+
+
+
