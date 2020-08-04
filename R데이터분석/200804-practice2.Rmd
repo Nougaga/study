@@ -1,0 +1,109 @@
+---
+title: "200804-practice2"
+author: "Nougaga"
+date: '2020 8 4 '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<<연습>>
+
+1. 다음 조건에 맞게 client 데이터프레임을 생성하고 데이터를 처리해보세요
+
+  + name : '유관순','홍길동','이순신','신사임당'
+  
+  + gender : 'F','M','M','F'
+  
+  + price : 50,65,45,75
+  
+  + 조건1 : 3개의 벡터 객체를 이용하여 client 데이터 프레임 생성
+  
+  + 조건2 : price 변수의 값이 65만원 이상이면, 문자열 'Best', 65만원 미만이면 'Normal'을 변수 result 컬럼에 추가
+  
+  + result 변수를 대상으로 빈도수 구하기
+  
+```{r}
+
+client <- data.frame(name = c('유관순','홍길동','이순신','신사임당'),
+                     gender = c('F','M','M','F'),
+                     price = c(50,65,45,75))
+client$result = ifelse(client$price>=65,"Best","Normal")
+table(client$result)
+
+```
+2. 다음 벡터 EMP는 '입사년도이름급여' 순으로 사원의 정보가 기록된 데이터이다.
+  벡터 EMP를 이용하여 다음과 같은 결과가 나타나도록 함수를 정의해보세요
+  (함수에 변수 EMP를 전달했을 때 출력결과와 같도록 만드시면 됩니다)
+  
+  + EMP <- c('2014홍길동220','2002이순신300','2010유관순260',"2019왕건500","2019동방신기1000")
+  
+  <출력결과>
+  전체 급여 평균 : 456
+  평균이상 급여 수령자
+  왕건 => 500
+  동방신기 => 1000
+
+```{r}
+library(stringr)
+
+getSalaryInfo <- function(emp){
+  df <- data.frame(year=str_extract(emp, "[0-9]{4}"), 
+                   name=str_extract(emp, "[가-힣]{2,}"), 
+                   salary=as.numeric(str_extract(emp, "[0-9]{3,}$")),
+                   stringsAsFactors=F)
+  avg_sal = mean(df$salary)
+  cat("전체 급여 평균 :",avg_sal,"\n")
+  cat("평균이상 급여 수령자\n")
+  for (i in 1:length(df$name)){
+    if (df$salary[i]>=avg_sal){
+      cat(df$name[i],"=>",df$salary[i],"\n")
+    }
+  }
+}
+
+EMP <- c('2014홍길동220','2002이순신300','2010유관순260',"2019왕건500","2019동방신기1000")
+getSalaryInfo(EMP)
+
+```
+3. 함수 y = f(x)에서 x의 값이 a에서 b까지 변할 때 △x = b - a를 증분이라 하며,
+   △y = f(b) - f(a)를 y의 증분으로 표현한다. 
+   평균변화율 : △y/△x = (f(b)- f(a))/(b - a) 
+   
+   조건) 함수 f(x) = x^3 + 4에서 x의 값이 1에서 3까지 변할 때 평균변화율을
+   구하는 함수를 작성해보세요. (평균변화율 = (f(3)-f(1))/(3-1) = 13)
+   
+```{r}
+fx <- function(x){
+  return(x^3 +4)
+}
+
+cal <- function(a,b){
+  return((fx(b)-fx(a))/(b-a))
+}
+
+cal(1,3)
+```
+4. 실습 : 몬테카를로 시뮬레이션
+  
+    몬테카를로 시뮬레이션은 현실적으로 불가능한 문제의 해답을 얻기 위해서 난수의
+  
+    확률분포를 이용하여 모의시험으로 근사적 해를 구하는 기법
+    
+    n번 시행했을 때 동전던지기의 확률을 구하라!
+```{r}
+coinToss <- function(n){
+  N <- runif(n, min = 0, max = 1)
+  N <- ifelse(N<0.5,0,1)
+  return(mean(N))
+  # return(mean(sample(x=c(0,1),size=n, replace=T)))  # 앞면:0 뒷면:1
+}
+
+coinToss(4)
+coinToss(10000)
+
+
+```
+
+
