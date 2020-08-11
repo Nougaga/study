@@ -156,7 +156,6 @@ ddata3 <- preRemove(ddata3)
 View(ddata3)
 View(table(ddata3))
 
-
 wdcount2 <- head(sort(table(ddata3), decreasing=T),30)
 palette <- brewer.pal(8,"Dark2")
 wordcloud(names(wdcount2),
@@ -172,5 +171,13 @@ wordcloud2(data=wdcount2)
 ?wordcloud2
 
 
+
+# TODO
+# 리스트에서 더 빠르게 바꾸자
+# gender 같은 곳에서 이상한 값 전처리
+# 중간에 데이터를 기록(write)하는 단계 추가
+
+library(readr)
+?read_delim
 
 

@@ -90,9 +90,17 @@ df %>%
 
 
 
+temp <- readline("05movielens\\movies2.dat")
 
 
 
+
+# TODO
+# list화 단계 빼라
+# gender 같은 곳에서 이상한 값 전처리
+# 데이터 정제 후 파일 형태로 저장하는 단계 추가
+# reshape 패키지에서 cast 활용
+#   ex) cc <- cast(aa, title ~ gender, value="mean_rating")
 
 
 
