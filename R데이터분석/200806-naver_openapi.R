@@ -8,7 +8,7 @@ library(RColorBrewer); library(wordcloud); library(wordcloud2)
 
 
 
-searchBig <- function(STR, n){
+get_blogData <- function(STR, n){
     
   # 1. ID/PW 저장
   clientID <- "aQ2Jmueot4FBm2rv1DT2"
@@ -34,6 +34,13 @@ searchBig <- function(STR, n){
   # 5. URL 완성
   reqURL <- paste(urlStr, searchStr, otherStr, sep="")
   
+  # httr 패키지가 없을 때 library는 오류내고는 끊고, require는 논리값을 반환하고 지나감
+  if(require(httr)){
+    print("package exists")
+  }else{
+    print("need to install httr package")
+  }
+  
   # 6. httr 패키지(GET() 이용 인증정보 담아 url 호출) library(httr)
   # 7. GET 함수 호출
   apiResult <- httr::GET(reqURL,
@@ -52,7 +59,11 @@ searchBig <- function(STR, n){
   return(blogData)
 }
 
+# 함수 저장
+save(get_blogData, file="get_blogData.rdata")
+
 rawData = ""
+
 
 temp <- readLines(con="data\\pork_do.txt", encoding = "UTF-8")
 ud <- data.frame(temp,rep("ncn",time=length(temp)),
@@ -62,7 +73,7 @@ buildDictionary(ext_dic=c("woorimalsam",'insighter', 'sejong'),
 rm(temp)
 
 for (i in 1:10){
-  blogData <- searchBig("돼지고기",i) # 1 ~ 10
+  blogData <- get_blogData("돼지고기",i) # 1 ~ 10
   
   copyData <- gsub("<.*?>"," ", blogData)
   
@@ -94,6 +105,16 @@ for (i in 1:length(re)){
   test2 <- gsub(paste("^",re[i],"$",sep=""),"",test2)
 }
 test2 <- test2[test2!=""]
+# test2 <- test1
+# test2 %in% re
+# test2.final <- test2[!test2 %in% re]
+
+
+# Out뭐시기 = c() # 대충 불용어들 들어있음
+# nouns %in% Out뭐시기
+# nouns.final <- nouns[!nouns %in% Out뭐시기]
+# nouns.final
+
 
 figPath = system.file("examples/t.png",package = "wordcloud2")
 wordcloud2(demoFreq, figPath = figPath, size = 1.5,color = "skyblue")
