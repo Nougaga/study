@@ -53,6 +53,18 @@ hist(sp$mean, labels=T, freq=F, ylim=c(0,0.35), col="green");lines(density(sp$me
 
 ### 1. **가설검정**
 
+단일집단
+비율 - binom.test
+평균 - shapiro.test 후
+
+두집단
+비율 - prop.test
+평균 - var.test 후
+
+세집단
+비율 - prop.test
+평균 bartlett.test 후
+
 #### **1.1. 교차분석**
 
 

@@ -38,6 +38,9 @@ dim(data)
 summary(data) # NA없음
 str(data);head(data)
 
+# 분포 확인
+hist(data$height)
+qqnorm(data$height); qqline(data$height, lty=1, col='blue')
 shapiro.test(data$height)
 # Shapiro-Wilk normality test
 # 
@@ -46,7 +49,6 @@ shapiro.test(data$height)
 #---------------------------------------------------------
 # Shapiro-Wilk 검정의 귀무가설인 '정규성을 따른다'를 기각할 수 있으므로
 # wilcox.test()를 실시한다.
-
 
 wilcox.test(data$height, mu=148.5, alternative="two.sided", conf.level=0.95)
 # Wilcoxon signed rank test with continuity correction
@@ -68,7 +70,7 @@ wilcox.test(data$height, mu=148.5, alternative="two.sided", conf.level=0.95)
 data <- read.csv("검정2\\sample.csv", header=T)
 head(data); str(data)
 summary(data)
-data <- data[!is.na(data$score),]
+# data <- data[!is.na(data$score),]
 
 data$gender2[data$gender==1] <- "1:남"
 data$gender2[data$gender==2] <- "2:여"
@@ -87,7 +89,21 @@ qchisq(1 - 0.05, 1) # 3.84
 # Chi^2 > 3.84이므로 카이제곱분포를 따르며(변인 간 독립성이 드러나지 않으며),
 # 유의수준 0.05 하에서 p값이 크기 때문에 '관계가 없다'(H0)를 기각하기 어려움
 
-
+data_tbl <- table(data$gender2, data$survey2)
+trial <- apply(data_tbl, 1, sum)
+prop.test(data_tbl[,2], trial, alternative="two.sided", conf.level=0.95)
+# 2-sample test for equality of proportions with continuity correction
+# 
+# data:  data_tbl[, 2] out of trial
+# X-squared = 1.1845, df = 1, p-value = 0.2765
+# alternative hypothesis: two.sided
+# 95 percent confidence interval:
+#   -0.14970179  0.03749599
+# sample estimates:
+#   prop 1    prop 2 
+# 0.7931034 0.8492063 
+# -------------------------------------------------------
+# 
 
 
 # 4. 두가지 다른 교육방법에 대한 시험성적에 차이가 있는지 검정(method.csv)
@@ -114,7 +130,7 @@ var.test(subset1$score, subset2$score, conf.level=0.95)
 #   ratio of variances
 # 1.06479
 # --------------------------------------------------------------------------
-# p값 >> 0.05이므로 유의수준 0.05 하에서 두 집단은 등분산성을 따른다.
+# p값 >> 0.05이므로 유의수준 0.05 하에서 두 집단은 동질
 
 t.test(subset1$score, subset2$score, var.equal=T, conf.level = 0.95)
 # Two Sample t-test

@@ -270,7 +270,6 @@ aa <- step(a,
 summary(aa)
 ```
 
-
 ```{r echo=F}
 library(mlbench)
 ```
@@ -281,18 +280,59 @@ bh <- BostonHousing
 # 종속변수 medv:	median value of owner-occupied homes in USD 1000's
 head(bh)
 str(bh)
-bh.lm <- lm(medv~crim+zn+indus+nox+rm+age+dis+rad+tax+ptratio+b+lstat, data=bh)
+
+
+bh.lm <- lm(medv~., data=bh)  # . 찍으면 모든 변수 포함
 summary(bh.lm)
-bh.step <- step(bh.lm, scope=list(lower=~-1, upper=~crim+zn+indus+nox+rm+age+dis+rad+tax+ptratio+b+lstat))
+
+# step을 이용한 회귀
+bh.step <- step(bh.lm, scope=list(lower=~-1, upper=~.))
 plot(bh.step)
 summary(bh.step)
 
-bh.lm2 <- lm(medv~crim + zn + nox + rm + dis + rad + tax + 
-    ptratio + b + lstat, data=bh); summary(bh.lm2)
-par(mfrow=c(2,2))
-plot(bh.lm2, which=1)  # 선형성(빨간 실선이 0에 가까운 수평선) & 독립성(특정한 모여있는 패턴이 발견되지 않음)
-plot(bh.lm2, which=2)  # 정규성(직선에 가깝게 잘 모여있음)
-plot(bh.lm2, which=3)  # 등분산성 & 독립성(적절하게 퍼져 있음, 특정 패턴 없음)
-plot(bh.lm2, which=4)  # 극단치
+# 직접 p값 < 0.05인 indus, age를 제거한 회귀
+bh.lm2 <- lm(medv~crim+zn+nox+rm+dis+rad+tax+ptratio+b+lstat, data=bh); summary(bh.lm2)
+
+
+
+vif(bh.lm2) # rad와 tax의 vif 값이 5보다 크다
+
+## 상관관계의 확인
+# (chas의 데이터 구조가 범주형이므로, 이를 제외한 나머지 변수들 간의 상관관계를 확인)
+y1 <- BostonHousing[c(1:3)]
+y2 <- BostonHousing[c(5:14)]
+y3 <- data.frame(y1,y2)
+cor(y3)
+# 결과: rad-tax의 상관관계가 0.91로 매우 높아, tax 변수를 제외하기로 결정
+
+# rad와 tax도 제거한 회귀
+bh.lm3 <- BostonHousing[c(-3,-7,-10)] # indus, age, tax 제외
+bh.lm3 <- lm(medv ~., data=bh.lm3)
+summary(bh.lm3)
+
+## 잔차도 확인
+plot_lm <- function(lm){
+  par(mfrow=c(2,2))
+  plot(lm, which=1)  # 선형성(빨간 실선이 0에 가까운 수평선) & 독립성(특정한 모여있는 패턴이 발견되지 않음)
+  plot(lm, which=2)  # 정규성(직선에 가깝게 잘 모여있음)
+  plot(lm, which=3)  # 등분산성 & 독립성(적절하게 퍼져 있음, 특정 패턴 없음)
+  plot(lm, which=4)  # 극단치
+}
+plot_lm(bh.lm3)
+
+## 자기상관성 확인
+dwtest(bh.lm3)
+bh.lm3$residuals[c(369,372,373)]
+bh.lm3$residuals[c(368,370,371,374)]
+
+bh.dw1 <- BostonHousing
+bh.dw2 <- bh.dw1[-c(368,370,371,374),]
+bh.dw1 <- bh.dw1[-c(369,372,373),]
+
+bh.lm21 <- lm(medv~crim+zn+nox+rm+dis+rad+tax+ptratio+b+lstat, data=bh.dw1); summary(bh.lm21); plot_lm(bh.lm21)
+bh.lm22 <- lm(medv~crim+zn+nox+rm+dis+rad+tax+ptratio+b+lstat, data=bh.dw2); summary(bh.lm22); plot_lm(bh.lm22)
+
+
 
 ```
+
