@@ -11,16 +11,25 @@ library(ggplot2)
 data(diamonds)
 dia <- diamonds
 str(dia)
-summary(dia$price)
-dia$price[dia$price >= 5324] <- 5324
-dia$price[dia$price < 5324 & dia$price >= 2401] <- 2401
-dia$price[dia$price < 2401 & dia$price >= 950] <- 950
-dia$price[dia$price < 950] <- 0
-dia$price <- factor(dia$price, levels=c(5324,2401,950,0), labels=c("S","A","B","C"))
+summary(dia)
+# factor 형을 level을 integer 삼아 변환
+dia$cut <- as.integer(dia$cut)
+dia$color <- as.integer(dia$color)
+dia$clarity <- as.integer(dia$clarity)
+# dia$price[dia$price >= 5324] <- 5324
+# dia$price[dia$price < 5324 & dia$price >= 2401] <- 2401
+# dia$price[dia$price < 2401 & dia$price >= 950] <- 950
+# dia$price[dia$price < 950] <- 0
+# dia$price <- factor(dia$price, levels=c(5324,2401,950,0), labels=c("S","A","B","C"))
+dia$price <- ifelse(dia$price >= quantile(dia$price, 0.75), "S",
+                    ifelse(dia$price >= quantile(dia$price, 0.5), "A",
+                           ifelse(dia$price >= quantile(dia$price, 0.25), "B", "C"
+                           )))
+dia$price <- factor(dia$price, levels=c("S","A","B","C"))
 dia <- as.data.frame(dia)
+table(dia$price)
 
-library(caret)
-
+library(caret)  # caret::confusionMatrix()
 
 # 1. Decision Tree : rpart::rpart()
 library(rpart)
@@ -37,10 +46,13 @@ prp(dia.rpart, type=2, extra=2, digits=3)
 dia.rpart.pr <- predict(dia.rpart, newdata=test1, type='class')
 confusionMatrix(dia.rpart.pr, test1$price)  # Accuracy : 0.8417
 
+# prunning
 plotcp(dia.rpart)
 dia.rpart.prn <- prune(dia.rpart, cp=dia.rpart$cptable[4])
 prp(dia.rpart.prn, type=2, extra=2, digits=3)
 
+dia.rpart.prn.pr <- predict(dia.rpart.prn, newdata=test1, type='class')
+confusionMatrix(dia.rpart.prn.pr, test1$price)  # Accuracy : 0.7938
 
 
 # 2. Decision Tree : party::ctree()
@@ -93,15 +105,15 @@ dia.bagging.pr <- predict(dia.bagging, newdata=dia[,-7])
 confusionMatrix(factor(dia.bagging.pr$class, levels=c("S","A","B","C")), 
                 dia[,7]) # Accuracy : 0.8378
 
-# looking into model
-summary(dia.bagging)
-dia.bagging$votes
-dia.bagging$samples[,1]
-
-# checking sample data
-bg_sample <- table(sort(dia.bagging$samples[,1]))
-bg_sample
-attributes(bg_sample1)$dimnames[[1]]
+# # looking into model
+# summary(dia.bagging)
+# dia.bagging$votes
+# dia.bagging$samples[,1]
+# 
+# # checking sample data
+# bg_sample <- table(sort(dia.bagging$samples[,1]))
+# bg_sample
+# attributes(bg_sample1)$dimnames[[1]]
 
 
 # 5. Ensemble : Boosting
@@ -115,11 +127,11 @@ test6 <- dia[-idx6,]
 
 set.seed(1984)
 dia.rf <- randomForest(price~., data=train6,
-                       ntree=100, mtry=sqrt(length(dia)-1), importance=T)
+                       ntree=40, mtry=floor(sqrt(length(dia)-1)), importance=T)
 plot(dia.rf)
 
 dia.rf.pr <- predict(dia.rf, newdata=test6[,-7])
-confusionMatrix(dia.rf.pr, test6[,7]) # Accuracy : 0.9336
+confusionMatrix(dia.rf.pr, test6[,7]) # Accuracy : 0.9341
 
 importance(dia.rf)
 varImpPlot(dia.rf, main="varImpPlot of diamonds")

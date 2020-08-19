@@ -6,13 +6,13 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(prul = TRUE)
 ```
 
 ## **의사결정나무(Decision Tree)**
 
 ### 1. rpart
-```{r echo=F}
+```{r prul=F}
 library(rpart)
 library(rpart.plot)
 library(caret)  # confusionMatrix
@@ -60,7 +60,7 @@ rpart.plot(m.rpart, type=4, extra=2, digits=3)
 ```
 
 ### 2. party
-```{r echo=F}
+```{r prul=F}
 require(party)
 ```
 ```{r}
@@ -87,7 +87,7 @@ plot(m.ctree.prn)
 
 ```
 ### 3. tree
-```{r echo=F}
+```{r prul=F}
 require(tree)
 ```
 ```{r}
@@ -119,7 +119,7 @@ bootstrap + aggregating
 
 각 표본에 대한 분류기를 생성한 후 앙상블
 
-```{r echo=F}
+```{r prul=F}
 library(adabag)
 ```
 ```{r}
@@ -145,7 +145,7 @@ pred1 <- predict(iris.bagging, newdata=iris[,-5])
 # model accuracy
 confusionMatrix(as.factor(pred1$class), as.factor(iris[,5]))
 ```
-```{r eval=F}
+```{r prul=F}
 # looking into model
 summary(iris.bagging)
 str(iris.bagging)
@@ -162,7 +162,58 @@ bg_sample11 <- data.frame(idx=as.numeric(attributes(bg_sample1)$dimnames[[1]]),
 bg_sample11
 str(bg_sample11)
 ```
-### 2. Boosting(넘어감)
+
+### 2. Boosting
+
+배깅의 과정과 유사하나 재표본 과정에서 각 자료에 동일한 확률을 부여하는 것이 아니라,
+
+분류가 잘못된 데이터에 더 큰 가중을 주어 표본을 추출
+
+붓스트랩 표본을 추출하여 calssifier를 생성한 후
+
+분류 결과를 이용하여 확률을 조정 --> 다음 표본을 추출
+
+```{r prul=F}
+library(adabag)
+library(caret)
+```
+
+```{r}
+# splitting data
+idx <- createDataPartition(iris$Species, p=0.7, list=F)
+iris.train <- iris[idx,]
+iris.test <- iris[-idx,]
+
+# boosting
+iris.boosting <- adabag::boosting(Species~., data=iris.train, boos=T, mfinal=11)
+
+# feature importance
+iris.boosting$importance
+
+# visualization
+par(mfrow=c(1,2))
+plot(iris.boosting$trees[[1]], margin=.2)
+text(iris.boosting$trees[[1]])
+plot(iris.boosting$trees[[11]], margin=.2)
+text(iris.boosting$trees[[11]])
+
+# prediction
+pred_boosting <- predict(iris.boosting, newdata=iris.test[,-5])
+
+# model accuracy
+table(iris.boosting$class == iris.train$Species)
+
+# test accuracy
+caret::confusionMatrix(as.factor(pred_boosting$class), iris.test[,5])  # Accuracy : 0.9111
+
+# tuning
+BRANCH = 6
+iris.boosting2 <- adabag::boosting(Species~., data=iris.train, boos=T, mfinal=BRANCH)
+plot(iris.boosting2$trees[[BRANCH]], margin=.2); text(iris.boosting2$trees[[BRANCH]])
+pred_boosting2 <- predict(iris.boosting2, newdata=iris.test[,-5])
+table(iris.boosting2$class == iris.train$Species)
+confusionMatrix(as.factor(pred_boosting2$class), iris.test[,5]) # Accuracy : 0.9111 별 차이 없음
+```
 
 ### 3. Random Forest
 
@@ -170,7 +221,7 @@ str(bg_sample11)
 
 사용할 feature를 임의로 추출하여 추출된 feature 중에 최적의 분할을 만들어낸다.
 
-```{r echo=F}
+```{r prul=F}
 library(randomForest)
 ```
 ```{r}
