@@ -23,7 +23,7 @@ clustering.w
 summary(clustering.w)
 
 par(mfrow=c(1,2))
-plot(clustering.w)
+plot(clustering.w, hang=-1)
 rect.hclust(clustering.w, k = 3, border = 'red')
 
 
@@ -32,7 +32,8 @@ data.norm <- scale(data[,-8])
 
 clustering.kms <- kmeans(data.norm, 3)
 plot(data.norm, col=clustering.kms$cluster)
-points(clustering.kms$centers, col=1:3, pch=9, cex=1.5)
+text(data.norm, pos=3)
+# points(clustering.kms$centers, col=1:3, pch=8, cex=1.5)
 
 
 # - 군집결과와 실제 데이터의 합격여부와 비교검토
