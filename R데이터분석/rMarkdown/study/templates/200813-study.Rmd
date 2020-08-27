@@ -61,7 +61,7 @@ knitr::opts_chunk$set(echo = TRUE)
   
   + 반면, 산점도가 넓게 퍼져 직선의 관계가 희미할수록 상관관계는 0에 가까워짐
   
-```{r echo=F}
+```{r results='hide'}
 library(Hmisc)
 ```
 ```{r}
@@ -77,7 +77,7 @@ cor(drat, disp)   # 상당히 강한 음의 상관관계
 
 # 상관성 분석2
 ```
-```{r echo=F}
+```{r results='hide'}
 library(dplyr)
 ```
 ```{r}
@@ -86,7 +86,7 @@ mtcars %>% str
 
 
 ```
-```{r echo=F}
+```{r results='hide'}
 library(acepack)
 ```
 ```{r}
@@ -98,13 +98,13 @@ cov(mtcars)
 
 
 ```
-```{r echo=F}
+```{r results='hide'}
 library(corrgram)
 ```
 ```{r}
 corrgram::corrgram(as.matrix(mtcars), upper.panel = panel.conf)
 ```
-```{r echo=F}
+```{r results='hide'}
 library(PerformanceAnalytics)
 ```
 ```{r}
@@ -114,7 +114,7 @@ PerformanceAnalytics::chart.Correlation(as.matrix(mtcars))
 
 #### **회귀분석 연습**
 단일회귀
-```{r echo=F}
+```{r results='hide'}
 library(MASS)
 ```
 
@@ -199,7 +199,7 @@ result.lm
 summary(result.lm)
 
 ```
-```{r echo=F}
+```{r results='hide'}
 library(car)
 ```
 ```{r}
@@ -222,7 +222,7 @@ summary(model)
 # 2) 잔차[오차] 분석
 #   2-1) 잔차 독립성 -> 더빈왓슨(자기상관성)
 ```
-```{r echo=F}
+```{r results='hide'}
 library(lmtest)
 ```
 ```{r}
@@ -270,7 +270,7 @@ aa <- step(a,
 summary(aa)
 ```
 
-```{r echo=F}
+```{r results='hide'}
 library(mlbench)
 ```
 ```{r}
