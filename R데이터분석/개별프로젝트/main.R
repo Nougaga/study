@@ -60,9 +60,9 @@ PYTHON <<- "파이썬"
 COBOL <<- "COBOL"
 DOGCAFE <<- "애견카페"
 HOTELWITHANIMAL <<- "동물동반호텔"
-BERNOULLI <<- "베르누이"
+NEWTON <<- "뉴턴"
 LANGMUIR <<- "랭뮤어"
-FALLGUYS <<- "폴가이즈"
+AMONGUS <<- "어몽어스"
 FLASHGAME <<- "플래시게임"
 GREENREVIEW <<- "그린리뷰"
 ADSCONTACT <<- "광고문의"
@@ -365,24 +365,74 @@ cntTable_engineer <- table(pwcList_engineer$bloggerlink)
 
 # blogData_onepiece <- get_blogDataSet(ONEPIECE)
 # blogData_jeanjacket <- get_blogDataSet(JEANJACKET)
-blogData_engineer1 <- get_blogDataSet(ENGINEER1)
+# blogData_engineer1 <- get_blogDataSet(ENGINEER1)
 # blogData_engineer2 <- get_blogDataSet(ENGINEER2)
 # blogData_corona <- get_blogDataSet(CORONA)
 # blogData_pest <- get_blogDataSet(PEST)
 # blogData_momoland <- get_blogDataSet(MOMOLAND)
 # blogData_bfmv <- get_blogDataSet(BFMV)
-blogData_s20 <- get_blogDataSet(S20)
+# blogData_s20 <- get_blogDataSet(S20)
 # blogData_mcsq <- get_blogDataSet(MCSQ)
 # blogData_python <- get_blogDataSet(PYTHON)
-blogData_cobol <- get_blogDataSet(COBOL)
+# blogData_cobol <- get_blogDataSet(COBOL)
 # blogData_dogcafe <- get_blogDataSet(DOGCAFE)
 # blogData_hotelwithanimal <- get_blogDataSet(HOTELWITHANIMAL)
-# blogData_bernoulli <- get_blogDataSet(BERNOULLI)
+# blogData_newton <- get_blogDataSet(NEWTON)
 # blogData_langmuir <- get_blogDataSet(LANGMUIR)
-# blogData_fallguys <- get_blogDataSet(FALLGUYS)
-blogData_flashgame <- get_blogDataSet(FLASHGAME)
+# blogData_amongus <- get_blogDataSet(AMONGUS)
+# blogData_flashgame <- get_blogDataSet(FLASHGAME)
 # blogData_greenreview <- get_blogDataSet(GREENREVIEW)
-blogData_adscontact <- get_blogDataSet(ADSCONTACT)
+# blogData_adscontact <- get_blogDataSet(ADSCONTACT)
+
+tempfunc <- function (DATASET){
+  DATASET$items$cnt_list <- rep(DATASET$total)
+  return(DATASET)
+}
+
+blogData_onepiece <- tempfunc(blogData_onepiece)
+blogData_jeanjacket <- tempfunc(blogData_jeanjacket)
+blogData_engineer1 <- tempfunc(blogData_engineer1)
+blogData_engineer2 <- tempfunc(blogData_engineer2)
+blogData_corona <- tempfunc(blogData_corona)
+blogData_pest <- tempfunc(blogData_pest)
+blogData_momoland <- tempfunc(blogData_momoland)
+blogData_bfmv <- tempfunc(blogData_bfmv)
+blogData_s20 <- tempfunc(blogData_s20)
+blogData_mcsq <- tempfunc(blogData_mcsq)
+blogData_python <- tempfunc(blogData_python)
+blogData_cobol <- tempfunc(blogData_cobol)
+blogData_dogcafe <- tempfunc(blogData_dogcafe)
+blogData_hotelwithanimal <- tempfunc(blogData_hotelwithanimal)
+blogData_newton <- tempfunc(blogData_newton)
+blogData_langmuir <- tempfunc(blogData_langmuir)
+blogData_amongus <- tempfunc(blogData_amongus)
+blogData_flashgame <- tempfunc(blogData_flashgame)
+blogData_greenreview <- tempfunc(blogData_greenreview)
+blogData_adscontact <- tempfunc(blogData_adscontact)
+
+bigBlogData <- rbind(blogData_onepiece$items,
+                     blogData_jeanjacket$items,
+                     blogData_engineer1$items,
+                     blogData_engineer2$items,
+                     blogData_corona$items,
+                     blogData_pest$items,
+                     blogData_momoland$items,
+                     blogData_bfmv$items,
+                     blogData_s20$items,
+                     blogData_mcsq$items,
+                     blogData_python$items,
+                     blogData_cobol$items,
+                     blogData_dogcafe$items,
+                     blogData_hotelwithanimal$items,
+                     blogData_newton$items,
+                     blogData_langmuir$items,
+                     blogData_amongus$items,
+                     blogData_flashgame$items,
+                     blogData_greenreview$items,
+                     blogData_adscontact$items
+                     )
+
+bigBlogData <- bigBlogData[,8:length(bigBlogData)]
 
 
 
@@ -391,10 +441,7 @@ blogData_adscontact <- get_blogDataSet(ADSCONTACT)
 
 
 
-
-
-
-View(blogData_onepiece$items)
+View(blogData_cobol$items)
 
 blogData_onepiece$items$link[blogData_onepiece$items$idx_p_m>200]
 
