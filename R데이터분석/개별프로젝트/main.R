@@ -14,19 +14,10 @@ linear regression / bernoulli's equation
 
 
 
-[200824 하던곳]
-
-https://blog.naver.com/PostView.nhn?blogId=koreaxn12&logNo=222062982799&redirect=Dlog&widgetTypeCall=true&directAccess=false
-
-Error in read_xml.raw(raw, encoding = encoding, base_url = base_url, as_html = as_html,  : 
-  Excessive depth in document: 256 use XML_PARSE_HUGE option [1]
+daysdiff는 다항회귀를 시도
 
 
 "
-
-
-
-
 
 ### </memo> ##############################################
 
@@ -39,10 +30,10 @@ library(xml2); library(rvest)
 library(httr)
 library(stringr)
 library(dplyr)
-library(rJava); library(KoNLP)
+# library(rJava); library(KoNLP)
 
 library(Hmisc); library(corrgram)
-
+library(ggplot2);library(wesanderson)
 
 
 # Directory ----------------
@@ -55,21 +46,38 @@ XML <<- "XML"
 JSON <<- "JSON"
 TXT <<- "TXT"
 
+ONEPIECE <<- "원피스"
+JEANJACKET <<- "청자켓"
+ENGINEER1 <<- "환경위해관리기사"
+ENGINEER2 <<- "전기기사"
+CORONA <<- "코로나"
+PEST <<- "흑사병"
+MOMOLAND <<- "모모랜드"
+BFMV <<- "불릿포마이발렌타인"
+S20 <<- "S20"
+MCSQ <<- "엠씨스퀘어"
+PYTHON <<- "파이썬"
+COBOL <<- "COBOL"
+DOGCAFE <<- "애견카페"
+HOTELWITHANIMAL <<- "동물동반호텔"
+BERNOULLI <<- "베르누이"
+LANGMUIR <<- "랭뮤어"
+FALLGUYS <<- "폴가이즈"
+FLASHGAME <<- "플래시게임"
+GREENREVIEW <<- "그린리뷰"
+ADSCONTACT <<- "광고문의"
+
+
 
 # saved special defines --------------------
-
-# 검색 키워드가 미리 저장되어 있음
-load("search_keywords.RData")
-# save(ONEPIECE, S20, TOEICSPEAKING, ENGINEER1, LM, BE, ADS1, ADS2, file="search_keywords.RData")
 
 # OBSTACLE1: <U+200B>
 load("obstacles.RData")
 # save(OBSTACLE1, "obstacles.RData")
 
-# LINE_STICKER1~6: 네이버 블로그 기본 스티커
+# LINE_STICKER1~12: 네이버 블로그 기본 스티커
 load("line_stickers.RData")
-# save(LINE_STICKER1,LINE_STICKER2,LINE_STICKER3,LINE_STICKER4,LINE_STICKER5,LINE_STICKER6, file="line_stickers.RData")
-
+# save(LINE_STICKER1,LINE_STICKER2,LINE_STICKER3,LINE_STICKER4,LINE_STICKER5,LINE_STICKER6, LINE_STICKER7, LINE_STICKER8, LINE_STICKER9, LINE_STICKER10, LINE_STICKER11, LINE_STICKER12, file="line_stickers.RData")
 ### </default_settings> ##################################
 
 
@@ -153,7 +161,6 @@ glaemfdj <- function(RAWDATA, PATTERN){
   # cnt_kw_d    글 요약에서 키워드 수
   # cnt_kw_m    글 본문에서 키워드 수
   # cnt_href_m  글 본문에서 외부 링크 수
-  # cnt_kw_m300 글 본문의 처음 300bytes(글 요약 후보)에서 키워드 수
   # idx_p_m     글 본문에서 키워드가 처음 등장한 문단 위치
   # cnt_p_m     글 본문에서 키워드가 등장한 문단 수
   # emo_w_m     글 본문에서 ^^, ㅎㅎ 수
@@ -161,7 +168,19 @@ glaemfdj <- function(RAWDATA, PATTERN){
   # daysdiff    검색일과 작성일 차이
   
   data <- fromJSON(RAWDATA)
-
+  ?rep
+  # 추가될 열을 0으로 초기화
+  data$items$postdate2 <- rep(0)
+  data$items$cnt_kw_t <- rep(0)
+  data$items$cnt_kw_d <- rep(0)
+  data$items$cnt_kw_m <- rep(0)
+  data$items$cnt_href_m <- rep(0)
+  data$items$idx_p_m <- rep(0)
+  data$items$cnt_p_m <- rep(0)
+  data$items$emo_w_m <- rep(0)
+  data$items$emo_LINE_m <- rep(0)
+  data$items$daysdiff <- rep(0)
+  
   # 작성일을 data 구조로 변경
   data$items$postdate2 <- as.Date(data$items[,"postdate"],format="%Y%m%d")
 
@@ -205,15 +224,15 @@ glaemfdj <- function(RAWDATA, PATTERN){
       html_main <- html_test %>% html_node("div#postViewArea")
     }
     
-    data$items$cnt_kw_m[i] <- str_count(html_main, pattern=PATTERN)
-    data$items$cnt_href_m[i] <- str_count(html_main, pattern="<a href=\"http")
-    
-    # 본문 내용
     vec_text <- html_main %>% html_nodes("p") %>% html_text()
-    
     vec_text <- vec_text[vec_text!=OBSTACLE1]
+    vec_text <- gsub(" ","",vec_text)
     chr_text <- paste(vec_text, collapse=" ")
     chr_text <- gsub("[[:space:]]{2,}","",chr_text)
+    
+    data$items$cnt_kw_m[i] <- str_count(chr_text, pattern=PATTERN)
+    data$items$cnt_href_m[i] <- str_count(html_main, pattern="\"link\" : \"http")
+
     # chr_text300 <- chr_text
     # Encoding(chr_text300) <- "bytes"
     # chr_text300 <- substr(chr_text300, 1, 300)
@@ -234,7 +253,13 @@ glaemfdj <- function(RAWDATA, PATTERN){
       str_count(chr_img, LINE_STICKER3) +
       str_count(chr_img, LINE_STICKER4) +
       str_count(chr_img, LINE_STICKER5) +
-      str_count(chr_img, LINE_STICKER6)
+      str_count(chr_img, LINE_STICKER6)+
+      str_count(chr_img, LINE_STICKER7)+
+      str_count(chr_img, LINE_STICKER8)+
+      str_count(chr_img, LINE_STICKER9)+
+      str_count(chr_img, LINE_STICKER10)+
+      str_count(chr_img, LINE_STICKER11)+
+      str_count(chr_img, LINE_STICKER12)
     
   }
   data$items$daysdiff <- as.numeric(data$lastBuildDate2 - data$items$postdate2)
@@ -304,6 +329,8 @@ get_blogDataSet <- function(KEYWORD){
   testtest <- testtest[!is.na(testtest$idx_p_m),]
   blogData$items <- testtest
   
+  blogData <- blogData[c(-3,-4)]
+  
   return(blogData)
 }
 
@@ -328,6 +355,34 @@ cntTable_smartphone <- table(pwcList_smartphone$bloggerlink)
 cntTable_toeicspeaking <- table(pwcList_toeicspeaking$bloggerlink)
 cntTable_engineer <- table(pwcList_engineer$bloggerlink)
 
+?wes_palette
+
+?plot
+
+
+
+
+
+# blogData_onepiece <- get_blogDataSet(ONEPIECE)
+# blogData_jeanjacket <- get_blogDataSet(JEANJACKET)
+blogData_engineer1 <- get_blogDataSet(ENGINEER1)
+# blogData_engineer2 <- get_blogDataSet(ENGINEER2)
+# blogData_corona <- get_blogDataSet(CORONA)
+# blogData_pest <- get_blogDataSet(PEST)
+# blogData_momoland <- get_blogDataSet(MOMOLAND)
+# blogData_bfmv <- get_blogDataSet(BFMV)
+blogData_s20 <- get_blogDataSet(S20)
+# blogData_mcsq <- get_blogDataSet(MCSQ)
+# blogData_python <- get_blogDataSet(PYTHON)
+blogData_cobol <- get_blogDataSet(COBOL)
+# blogData_dogcafe <- get_blogDataSet(DOGCAFE)
+# blogData_hotelwithanimal <- get_blogDataSet(HOTELWITHANIMAL)
+# blogData_bernoulli <- get_blogDataSet(BERNOULLI)
+# blogData_langmuir <- get_blogDataSet(LANGMUIR)
+# blogData_fallguys <- get_blogDataSet(FALLGUYS)
+blogData_flashgame <- get_blogDataSet(FLASHGAME)
+# blogData_greenreview <- get_blogDataSet(GREENREVIEW)
+blogData_adscontact <- get_blogDataSet(ADSCONTACT)
 
 
 
@@ -337,25 +392,41 @@ cntTable_engineer <- table(pwcList_engineer$bloggerlink)
 
 
 
-blogData_toeicspeaking <- get_blogDataSet(TOEICSPEAKING)
 
 
-testtest <- blogData_toeicspeaking$items[,8:17]
-corrgram::corrgram(as.matrix(testtest), upper.panel = panel.conf)
+View(blogData_onepiece$items)
 
-test_lm <- lm(score~., data=testtest)
+blogData_onepiece$items$link[blogData_onepiece$items$idx_p_m>200]
+
+
+df <- blogData_onepiece$items[,8:length(blogData_onepiece$items)]
+dim(df)
+summary(df)
+head(df,10)
+freq <- table(df$idx_p_m)
+freq <- freq[1:7]
+barplot(freq, ylim = c(0,350), 
+        main="키워드가 처음으로 등장하는 문단 위치",
+        xlab="등장 위치",
+        ylab="블로그 수",
+        col=wes_palette(n=7, name="Darjeeling1", type="continuous"))
+
+
+corrgram::corrgram(as.matrix(df), upper.panel = panel.conf,
+                   cex.labels = 1)
+
+?corrgram
+test_lm <- lm(score~., data=df)
 summary(test_lm)
 
 test_step <- step(test_lm, direction = "both")
 summary(lm(score~idx_p_m, data=testData_lm))
 
+View(blogData_onepiece$items)
+df[df$cnt_kw_t==2,]
+summary(df)
+str(df)
 
-data(iris)
-testdata <- iris
-head(testdata)
-testdata %>% 
-  group_by(Species) %>% 
-  summarise(sepallength=mean(Sepal.Length))
-
+blogData_onepiece$items[blogData_onepiece$items$cnt_href_m>10,c(-1,-3,-4,-5,-6,-7)]
 
 ### </script> ############################################

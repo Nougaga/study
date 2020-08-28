@@ -2,7 +2,7 @@ import sys
 
 
 N = int(sys.stdin.readline())
-res = 0
+res = N
 
 for i in range(N):
     word = list(sys.stdin.readline().rstrip())
@@ -20,17 +20,17 @@ for i in range(N):
     length = len(word)
     j = 0
     while(True):
-        if j == length:
+        if j >= length:
             break
-        k = j
+        k = j+1
         while(True):
-            if k == length:
+            if k >= length:
                 break
             if word[j] == word[k]:
-                pass
-            
-
+                res -= 1
+                j = length
+                break
+            k += 1
         j += 1
 
-
-    
+print(res)
