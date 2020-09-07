@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>꿈도 희망도 없는 목요일인뎃스</title>
+<style type="text/css">
+*{font-family: "메이플스토리"}
+div#here{
+	width: 500px;
+	height: 600px;
+	text-indent: 10px;
+	border: 5px dotted blue;}
+#sunday{
+	color: red;}
+.activate{
+	background-color: pink;}
+</style>
+<script src="../ch14/elt.js"></script>
+</head>
+<body>
+<h1>element 생성</h1>
+<button id="btn">외부 js의 함수 호출</button>
+<button id="btn2">selectList추가</button>
+<button id="btn3">selectList제거</button>
+<div id="here">
+</div>
+<script type="text/javascript">
+
+var p = document.createElement("p");	// <p></p>
+var p2 = document.createElement("p");
+var p3 = document.createElement("p");
+var t = document.createTextNode("월..요...일......");
+var t2 = document.createTextNode("화요일...");
+var t3 = document.createTextNode("토요일!!!!!!!!!");
+p.setAttribute("class", "activate");
+p.appendChild(t);
+p2.appendChild(t2);
+p3.appendChild(t3);
+var h = document.querySelector("#here");
+h.appendChild(p);
+h.appendChild(p2);
+h.insertBefore(p3,p);
+
+btn.onclick = function(){
+	var p4 = elt("p",{id:"sunday","class":"activate"},"벌써 일요일?","왜<br>","왜","왜","왜왜왜왜왜","왜애애애애애애");
+	console.log(p4);
+	console.log(p4.outerHTML);
+	h.innerHTML += p4.outerHTML;
+	
+	
+	var img = elt("img",{alt:"우는고양이",
+		width: "300px",
+		height: "200px",
+		src:"https://i.kym-cdn.com/photos/images/original/001/384/531/8ed.jpg"});
+	h.appendChild(img);
+};
+
+btn2.onclick = function(){
+	/*
+	<select>
+		<option>A형</option>
+		<option>B형</option>
+		<option>O형</option>
+		<option>AB형</option>
+	</select>
+	*/
+	var s = elt("select",{id:"blood"});
+	var arr = ["A형", "B형", "O형", "AB형"];
+	arr.forEach(function(aa){
+		var op = elt("option", {value:aa}, aa+"입니다.");
+		s.appendChild(op);
+	});
+	h.appendChild(s);
+};
+
+
+btn3.onclick = function(){
+	var b = document.querySelector("#blood");
+	b.parentNode.removeChild(b);
+};
+
+h.innerHTML += "<p>수.....요일</p><p>..목요일</p>";
+	
+</script>
+</body>
+</html>

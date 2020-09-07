@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>함수정의</title>
+</head>
+<body>
+<script>
+// 1. 선언적 함수
+function square(x){return x*x;}
+// 2. 리터럴 함수
+var square = function(x){return x*x}
+// 3. Function 생성자
+var square = new Function("x", "return x*x;");
+console.log("Function 생성자: 5^2=",square(5));
+// 4. 화살표 함수
+var square = (x) => x*x;
+console.log("화살표 함수: 10^2=",square(10));
+var add = (a,b) => a+b;
+console.log("화살표 함수: 1+2=",add(1,2));
+
+// 배열 요소의 제곱합에 대한 제곱근을 구하는 함수
+var arr = [10, 20, 30, 40];
+var result = norm(arr);
+console.log(result);
+function norm(arr2){
+	var sum2 = sumSquare();
+	return Math.sqrt(sum2);
+	
+	// 내부함수, 중첩함수
+	function sumSquare(){
+		var sum = 0;
+		for(var i=0; i<arr2.length; i++){
+			sum += arr2[i]*arr2[i];
+		}
+		return sum;
+	}
+}
+function sumSquare(){return 9};
+
+// 즉시실행 함수
+(function(str){
+	console.log("즉시실행 함수1: ",str);
+})("커피마시고싶다");
++ function(str){
+	console.log("즉시실행 함수2: ",str);
+}("커어어피이이");
+
+// 함수 인자
+function multiply1(a, b=1){
+	return a*b;
+}
+function multiply2(a, b){
+	b = b || 1;
+	return a*b;
+}
+function sum(){
+	console.log(arguments);
+	var sum = 0;
+	for(var i in arguments){
+		sum += arguments[i];
+	}
+	return sum;
+	
+}
+console.log(multiply1(10,20));
+console.log(multiply2(10));
+console.log(sum(1,2,3,4,5,6,7));
+
+// 재귀함수
+console.log(fact(5));
+function fact(n){
+	if(n===1)
+		return 1;
+	return n*fact(n-1);
+}
+
+</script>
+
+</body>
+</html>

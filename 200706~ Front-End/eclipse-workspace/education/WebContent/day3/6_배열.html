@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>배열</title>
+</head>
+<body>
+<div id="here"></div>
+<script>
+/*
+// 문자배열 정렬
+var arr = ["apple","melon","banana","kiwii"];
+arr.sort(f);
+here.innerHTML = arr;
+
+// 숫자배열
+var arr = [10,100,40,30,70,50];
+var f = function(a,b){return a-b};
+arr.sort(f);
+here.innerHTML = arr;
+
+function Student(name, subject, score){
+	this.name= name;
+	this.subject= subject;
+	this.score= score;
+}
+
+Student.prototype.myIntro = function(){
+	return "나는 " + this.name + " "
+	+ this.subject + this.score;
+}
+Student.prototype.toString = function(){
+	return this.myIntro();
+}
+var arr = [];
+arr.push(new Student("김","산업공학",100));
+arr.push(new Student("박","경영학",80));
+arr.push(new Student("양","통계학",55));
+arr.push(new Student("최","소프트웨어공학",68));
+arr.push(new Student("이","경영학",94));
+
+arr.sort(function(b,a){return a.score-b.score});
+here.innerHTML = arr.join("<br>");
+
+here.innerHTML += "<hr>"
+arr.forEach(function(aa){
+	here.innerHTML += "<br>" + aa;	
+});
+
+
+// map: 들어온 data를 변경하여 return
+var arr = [10,100,40,30,70,50];
+var arr2 = arr.map(function(x){return x/10});
+var arr3 = arr.map(function(y){return y**2});
+here.innerHTML = arr;
+here.innerHTML += "<br>" + arr2;
+here.innerHTML += "<br>" + arr3;
+*/
+
+var arr = [1,2,3,4,5,6,7,8,9,10];
+var arr4 = arr.reduce(function(prev,val){
+	console.log(prev+"==="+val);
+	return prev+val;
+});
+here.innerHTML = arr4;
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>I'm ALIVE!</title>
+</head>
+<body>
+<script>
+
+let z = 9999;
+var a=10000;
+b=2000;
+{
+	var c=300;
+	d=40;
+	let e=5;	// {} 내에서만 유효
+	console.log(a+b+c+d+e);
+	console.log(z);
+}
+console.log(a+b+c+d);
+
+
+
+call();
+function call(){
+	console.log(aa);
+	var aa = 100;
+	bb = 200;
+	let cc = 300;
+	console.log(cc);
+
+};
+console.log(bb);
+
+
+
+// const pi;	// 선언부터 값을 할당해야 함
+const pi = 3.14;
+// const pi = 3.141592;	// 재선언할 수 없음
+
+
+
+// Circle Object
+var circle={
+	center:	{x:1, y:2},
+	radius:	3,
+	area:	function(){ return this.radius * this.radius * Math.PI; }
+};
+console.log("circle.area() = " + circle.area());
+circle.translate = function(){
+	this.center.x = 10;
+	this.center.y = 20;
+	this.radius = 30;
+};
+circle.translate();
+console.log("circle.area() = " + circle.area());
+
+
+
+
+
+</script>
+</body>
+</html>

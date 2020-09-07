@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 브라우저</title>
+</head>
+<script src="resources/jquery-3.5.1.min.js"></script>
+<script>
+$(function(){
+	$("#btn1").click(f1);
+	$("#btn2").click(f2);
+	$("#btn3").click(f3);
+	$("#btn4").click(f4);
+	$("#btn5").click(f5);
+	$("#btn6").click(f6);
+	$("#btn7").click(f7);
+	$("#btn8").click(f8);
+	$("#btn9").click(f9);
+	function f1(){
+		$.get("ajax.txt", function(data, status){
+			var s = data.split("\n").join("<br>");
+			$("#here").html(s);
+		});
+	}
+	function f2(){
+		$.get("ajax.JSON", function(data, status){
+			var s = "";
+			for(var prop in data){
+				s += prop + " => " + data[prop] + "<br>";
+			}
+			$("#here").html(s);
+		});
+	}
+	function f3(){
+		$.get("2_효과.html", function(data){
+			$("#here").html(data);
+		});
+	}
+	function f4(){
+		$.get("ajax_arr.json", function(data){
+			var arr = data.finalScore;
+			var s="<ul>";
+			$.each(arr, function(idx, elt){
+				s += "<li>" + elt.subject + " -- " + elt.score + "</li>";
+			});
+			s += "</ul>";
+			$("#here").html(s);
+			
+			
+			var s2 = "<table><tr><td>과목명</td><td>점수</td></tr>";
+			$.each(arr, function(idx,elt){
+				s2 += "<tr><td>" +elt.subject +"</td>"
+						+"<td>" +elt.score + "</td></tr>"
+			})
+			s2 += "</table>"
+			$("#here").html(s+s2);
+			
+		})
+	}
+	// parameter 가져가기 ... server 프로그램 실행하기
+	function f5(){
+		var param = {
+				"aa":	$("#userid").val(),
+				"bb":	$("#userpass").val()
+			};
+		$.get("userChk.jsp",param,function(data){
+			$("#here").html(data);
+			});
+	}
+	function f6(){
+		var param = {};
+		param.aa = $("#userid").val();
+		param.bb = $("#userpass").val()
+		$.post("userChk.jsp",param,function(data){
+			$("#here").html(data);
+			});
+		
+	}
+	function f7() {
+		var param = {};
+		param.aa = $("#userid").val();
+		param.bb = $("#userpass").val()
+		
+		$.ajax({
+			type: "get",
+			url: "userChk.jsp",
+			data: param, 
+			dataType: "html",
+			success: function(aa){
+				$("#here").html(aa);
+			}
+		});
+	}
+	function f8() {
+		var param = {};
+		param.aa = $("#userid").val();
+		param.bb = $("#userpass").val()
+		
+		$.ajax({
+			type: "get",
+			url: "userChk2.jsp",
+			data: param, 
+			dataType: "json",
+			success: function(aa){
+				$("#here").html(aa["ID"]+"<br>"+
+								aa["Loc."]+"<br>"+
+								aa["Tel."]);
+			}
+		});
+	}
+	
+	function f9(){
+		$.ajax({
+			type:"get",
+			url:"ajax_DBTest.jsp",
+			data:{"sal": $("#salary").val()},
+			success:function(result){
+				$("#here").html(result);
+			}
+		});
+	}
+});
+</script>
+<body>
+<button id="btn1">text받기</button>
+<button id="btn2">json받기</button>
+<button id="btn3">html받기</button>
+<button id="btn4">json받기(배열)</button>
+<br>
+<input type="text" id="userid">
+<input type="text" id="userpass">
+<button id="btn5">param가져가(get)</button>
+<button id="btn6">param가져가(post)</button>
+<button id="btn7">$.ajax함수</button>
+<button id="btn8">$.ajax함수(json받기)</button>
+<hr>
+급여: <input type="number" id="salary">이상
+<button id="btn9">DBTest</button>
+<h1>jQuery 이용 Ajax 사용하기</h1>
+<hr>
+<div id="here">요기요</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Form</title>
+<style>
+*	{font-family:"메이플스토리";}
+.container
+	{border: 5px dotted red;}
+.box{color: blue;}
+</style>
+<script>
+window.onload = function(){
+	btn.onclick = function(){
+		var elt = document.querySelector("#tt");
+		elt.classList.toggle("container"); 
+	};
+};
+function call(){
+	var s = "userID="		+ userID.value		+ "&" +
+			"userName="		+ userName.value	+ "&" +
+			"userBirth="	+ userBirth.value	+ "&" +
+			"userPhone="	+ userPhone.value;
+	location.href="server_pg.jsp?" + s;
+}
+</script>
+</head>
+<body>
+<button id="btn">toggle</button>
+<div id="tt" class="container box box2">
+<h1>Get방식</h1>
+<form id="myform" action="server_pg.jsp">
+	ID:		<input type="text" id="userID" name="userID"><br>
+	이름:		<input type="text" id="userName" name="userName"><br>
+	생일:		<input type="date" id="userBirth" name="userBirth"><br>
+	전화번호:	<input type="tel" id="userPhone" name="userPhone">
+	<input type="submit" value="서버 전송">
+
+<!-- http://localhost:9090/education/day4/server_pg.jsp?userID=adfjkl&userName=%EA%B0%80%EB%82%98%EB%8B%A4&userBirth=2020-07-13&userPhone=010-1234-5678 -->
+</form>
+<h1>Get방식</h1>
+<a href="javascript:call();">Get방식으로 전송하기</a>
+</div>
+
+<hr>
+<h1>Post방식</h1>
+<form action="server_pg.jsp" method="post">
+	ID:		<input type="text" id="userID2" name="userID2"><br>
+	이름:		<input type="text" id="userName2" name="userName2"><br>
+	생일:		<input type="date" id="userBirth2" name="userBirth2"><br>
+	전화번호:	<input type="tel" id="userPhone2" name="userPhone2">
+	<input type="submit" value="서버 전송">
+<!-- http://localhost:9090/education/day4/server_pg.jsp -->
+</form>
+<script>
+document.querySelector("#myform").onsubmit = function(ev){
+	var id = userID.value;
+	if (id.length<10){
+		alert("10자리 이상으로 입력하십시오.");
+		ev.preventDefault();
+		// ev.stopPropagation();	// 이벤트의 상위전파 막기
+	}
+	else alert(id);
+};
+</script>
+</body>
+</html>

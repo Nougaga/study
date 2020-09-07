@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+*{font-family: "메이플스토리";}
+</style>
+</head>
+<body>
+<p>&amp; ...entity(Browser에 내장)</p>
+<p id="here">&hearts; <strong>오늘</strong>은 <em>목요일</em>입니다...</p>
+<script>
+
+var s = document.querySelector("#here").innerHTML;
+console.log("innerHTML: ",s);
+var s = document.querySelector("#here").textContent;
+console.log("textContent: ",s);
+var s = document.querySelector("#here").innerText;
+console.log("innerText: ",s);	
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Overheat</title>
+<script>
+	// callback
+	window.onload = function(){
+		var myBtn = document.getElementById("btn3");
+		myBtn.onclick = function(){
+			alert("버튼3 누름");
+		};
+	};
+</script>
+</head>
+<body>
+
+<input type="button" value="버튼1" onclick="alert('버튼1');">
+<button onclick='alert("버튼2")'>버튼2</button>
+<button id="btn3">버튼3</button>
+
+<script>
+// 변수에 대하여
+// js는 코드 실행 시 선언된 var와 func를 먼저 읽어내나(끌올, hoisting)
+// 자세한 정의 내용은 나중에
+
+console.log("before a = ", a); // NOT error: a is undefined (Hoisting)
+// console.log("before b = ", b); // error: b is not defined
+
+var a = 20;
+b = 10;
+
+console.log("after a = ", a);
+console.log("after b = ", b);
+
+call();
+
+function call(){
+	alert("함수입니다.");
+}
+</script>
+
+<script>
+//변수의 타입
+var a = 10;
+console.log(a + "==>", typeof(a));
+a = "자바스크립트";
+console.log(a + "==>", typeof(a));
+a = 10>20;	// false
+console.log(a + "==>", typeof(a));
+a = 10/0;	// infinity
+console.log(a + "==>", typeof(a));
+a = 10/"A";	// NaN(Not a Number)
+console.log(a + "==>", typeof(a));
+
+var s = "문자열";
+console.log(s);
+
+var s = '문자열'+
+'안'+
+'돼';
+console.log(s);
+
+var score = 100
+var s = `뭔데
+돼!
+돼? ${score}`;
+console.log(s);
+</script>
+
+</body>
+</html>

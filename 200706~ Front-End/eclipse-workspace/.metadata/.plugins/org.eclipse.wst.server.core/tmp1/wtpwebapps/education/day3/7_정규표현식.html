@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Regular Expressions</title>
+</head>
+<body>
+<script>
+var p = /cat/;
+var p = /[0-9]/;
+var p = /[^0-9]/;
+var p = /^[0-9]/;
+var p = /\d{4}-\d{2}-\d{2}/;
+var p = /Java.*/;
+var p = /Java\w+/;
+var p = /little/g;
+var p = /0(10-\d{4}-\d{4})/g;
+/***********************************************/
+var s = "나sms 문자di? cat과 고양이";
+var s = "12하하";
+var s = "2020-07-08";
+var s = "I love JavaScript";
+var s = "1 little 2 little indian";
+var s = "Tom, tom@example.com, 010-7223-9503";
+/***********************************************/
+//console.log(p.test(s));
+//console.log(p.exec(s),p.index);
+//console.log(s.match(p));
+console.log(s.replace(p,"+82-$1"));
+</script>
+</body>
+</html>

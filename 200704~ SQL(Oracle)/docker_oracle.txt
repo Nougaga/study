@@ -1,0 +1,2 @@
+docker pull zmni123/oraxe11g:latest
+docker pull zmni123/oracleclient:latest

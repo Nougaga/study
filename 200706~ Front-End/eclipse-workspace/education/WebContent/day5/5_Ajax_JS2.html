@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+아이디: <input type="text" id="userid" name="userid"><br>
+비밀번호: <input type="text" id="userpass" name="userpass"><br>
+<input type="button" value="로그인">
+
+<div id="here">여기</div>
+<script>
+document.querySelector("input[type='button']")
+	.onclick = function(){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState==4 && xhr.status==200){				
+				here.innerHTML = xhr.responseText;
+			}
+		};
+		var param = "aa=" + userid.value + "&bb=" + userpass.value;
+		xhr.open("get","userChk.jsp?"+param);
+		xhr.send(null);
+	}
+
+</script>
+</body>
+</html>

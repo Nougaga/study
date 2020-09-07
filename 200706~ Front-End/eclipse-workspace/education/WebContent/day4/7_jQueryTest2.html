@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 브라우저</title>
+
+<style>
+.myclass0{background-color: #00ff00;}
+.myclass1{background-color: #00ffff;}
+div{
+	width: 200px;
+	height: 100px;
+	border: 5px dotted black;
+}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script>
+$(function(){
+	var arr = [10,20,50,100,70];
+	$.each(arr, function(idx, item){
+		console.log(idx, item);
+	});
+	
+	$("h1").each(function(aa){
+		$(this).addClass("myclass"+aa%2);
+	});
+	
+	$("#btn").click(function(){
+		$(this).text("비활성");
+		$(this).parent().find("span").text("활성");
+		$(this).parent().css("backgroundColor","yellow");
+	});
+	
+	$("#btn_on").click(function(){
+		ret = setInterval(function(){
+				var idx = Math.floor(Math.random()*16777216);
+				idx = "#" + idx.toString(16);
+				$("html").css("backgroundColor",idx);
+			}, 100)
+	})
+	
+	$("#btn_off").click(function(){
+		clearInterval(ret);
+		$("html").css("backgroundColor","#FFFFFF");
+	})
+	
+});
+</script>
+</head>
+<body>
+<button id="btn_on">발광ON</button>
+<button id="btn_off">발광OFF</button>
+<h2 id="심심해">jQuery연습</h2>
+<h1>연습연습</h1>
+<h1>연습연습</h1>
+<h1>연습연습</h1>
+<h1>연습연습</h1>
+<h1>연습연습</h1>
+<h1>연습연습</h1>
+<div>
+<span></span>
+<button id="btn">활성화하기</button>
+</div>
+
+
+<script>
+</script>
+</body>
+</html>

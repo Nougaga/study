@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>브라우저객체</title>
+</head>
+<body>
+<button>버튼1</button>
+<button>버튼2</button>
+<!-- <a href="https://www.w3schools.com/">JavaScript복습</a> -->
+<a href="javascript:call()">JavaScript복습</a>
+<div id="here"></div>
+<script>
+
+for(var prop in navigator){
+	here.innerHTML += "<br>" + prop + "=>" + navigator[prop];	
+}
+
+window.onload = function(){
+	console.log("로드 완료...onload");
+}
+document.addEventListener("DOMContentLoaded",function(){
+	console.log("onDOMContentLoaded");
+})
+
+
+function call(){
+	alert("W3SCHOOL 호출");
+	location.href="https://www.w3schools.com/";
+}
+
+var btn = document.querySelector("button");
+btn.onclick = function(){
+	alert("1번째 버튼");
+}
+
+</script>
+</body>
+</html>
+
+

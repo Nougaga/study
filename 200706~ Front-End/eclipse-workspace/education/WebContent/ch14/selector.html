@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>selector</title>
+<style>
+p.subtitle > span{
+	border: 3px dotted red;
+}
+</style>
+</head>
+<body>
+<p>첫 번째 p</p>
+<p class="subtitle">두 번째 p
+	<span>span(자식)</span></p>
+<p class="subtitle">세 번째 p
+	<a><span>span(자손)</span></a></p>
+<p class="subtitle">네 번째 p</p>
+<p>다섯 번째 p</p>
+<button id="btn1">스타일변경</button>
+<script>
+btn1.onclick = function(){
+	var elt= document.querySelector("p.subtitle > span");	// 자식
+	elt.style.backgroundColor = "yellow";
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<button id="btn1">for문</button>
+<button id="btn2">while문</button>
+<button id="btn3">doWhile문</button>
+<button id="btn4">break문</button>
+<button id="btn5">continue문</button>
+<button id="btn6">로또번호 생성기</button>
+<div id="here">요기요</div>
+<script>
+btn1.onclick = function(){
+	here.innerHTML="for";
+	for(var i=1; i<=10; i++){
+		here.innerHTML += "<br>" + i;
+	};
+	here.innerHTML += "<br>For 이후: " + i;
+};
+btn2.onclick = function(){
+	here.innerHTML="while";
+	var i=1;
+	while(i<=10){
+		here.innerHTML += "<br>" + i;
+		i++;
+	};
+	here.innerHTML += "<br>while 이후: " + i;
+};
+btn3.onclick = function(){
+	here.innerHTML="do~while";
+	var i=1;
+	do{
+		here.innerHTML += "<br>" + i;
+		i++;
+	}while(i<=10);
+	here.innerHTML += "<br>do~while 이후: " + i;
+};
+btn4.onclick = function(){
+	here.innerHTML="break";
+	var i=1;
+	aa:while(true){
+		if(confirm("종료하시겠습니까?")) break aa;
+		here.innerHTML += "<br>" + i;
+		i++;
+	};
+	alert("종료합니다.");
+	here.innerHTML += "<br>break 이후: " + i;
+};
+btn5.onclick = function(){
+	here.innerHTML="continue";
+	for(let i=1; i<=10; i+=2){
+		if (i===5) continue;
+		here.innerHTML += "<br>" + i;
+	}
+};
+
+btn6.onclick = function(){
+	/*
+	var lotto = [];
+	while(true){
+		let rn = Math.floor(Math.random()*45) + 1;
+		
+		
+		let i = 0
+		let stop = lotto.length;
+		let check = false;
+		
+		while(i<stop){
+			flag = rn===lotto[i];
+			if (check) break;	// 중복 검출됨
+			i++;
+		}
+		
+		if (check) continue;	// 중복
+		lotto.push(rn);		// 중복아님
+		
+		if (lotto.length===6) break;
+	};
+	*/
+	
+	var lotto = [0,0,0,0,0,0];
+	var page = 0;
+	while(true){
+		let rn = Math.floor(Math.random()*45) + 1;
+		let check = lotto[0]===rn||
+					lotto[1]===rn||
+					lotto[2]===rn||
+					lotto[3]===rn||
+					lotto[4]===rn||
+					lotto[5]===rn;
+		if (check) continue;
+
+		lotto[page] = rn;
+		page++;
+		if (page===6) break;		
+	};
+	lotto.sort(function(a, b){return a - b;});
+	here.innerHTML = "로또번호 6자리: " + lotto[0] + " " + lotto[1] + " " + lotto[2] + " " + lotto[3] + " " + lotto[4] + " " + lotto[5]
+}
+
+</script>
+</body>
+</html>

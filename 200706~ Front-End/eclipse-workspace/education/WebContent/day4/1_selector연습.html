@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>selector연습</title>
+<style>
+h1	{background-color: lightgreen;}
+*	{font-family: '나눔고딕코딩';}
+#myh{color: blue;}
+
+h1[title]{
+	font-size: 10px;}
+*[title]{
+	border: 1px solid red;}
+h1[class='myclass']{
+	color: hotpink;}
+input:checked{
+	width: 100px;}
+h1:hover{
+	background-color: orange;}
+#title>span{	/* 자식만 */
+	border: 5px dotted purple;}
+h1:first-child{	/* 처음으로 만난 자식 */
+	border: 5px dotted blue;}
+h1:first-of-type{	/* 처음으로 만난 타입 */
+	background-color: green;}
+</style>
+
+</head>
+<body>
+<p>AAAAAAAAAAAAAAAAAAA</p>
+<h1 id="myh">나눔고딕코딩 한글</h1>
+<div id="title">
+<p>BBBBBBBBBBBBBBBBBBB</p>
+<h1>div 안에 있는 h1</h1>
+<h1>div 안에 있는 h1</h1>
+<h1>div 안에 있는 h1</h1>
+<!-- 라면은 h1의 자식, p의 자식 -->
+<p>오늘은 뭘 먹을까...<span>라면</span>...</p>	
+<!-- 짜장면은 div의 자식 -->
+<span>짜장면</span>... 
+</div>
+<h1 title="tt" class="myclass">제목2</h1>
+<h1 title="ss">제목3</h1>
+<h2 title="aa">나눔고딕코딩 JavaScript = 0;</h2>
+<input type="radio" name="gender">남자
+<input type="radio" name="gender">여자
+<p>
+<input type="checkbox" name="fruit">banana
+<input type="checkbox" name="fruit">lemon
+<input type="checkbox" name="fruit">apple
+</body>
+</html>

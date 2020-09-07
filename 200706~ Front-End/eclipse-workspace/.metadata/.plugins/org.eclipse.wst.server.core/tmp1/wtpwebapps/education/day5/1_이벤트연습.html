@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Practice : Event</title>
+<style>
+*{font-family: "메이플스토리";}
+ .mydesign{ border : 5px dotted red;}
+
+</style>
+<script src="resources/jquery-3.5.1.min.js"></script>
+<script>
+$(function(){
+	$("h1:first-child").on("click", call);
+	$("h1").eq(1).on("click", call2);
+	var obj = {
+			mouseenter: function(){
+				console.log("마우스 왔어");
+				$(this).css("background-color",
+						"#" + Math.floor(Math.random()*16777216).toString(16));
+				$(this).addClass("mydesign");
+			},
+			mouseleave: function(){
+				console.log("마우스 갔어");
+				$(this).css("background-color", "white");
+				$(this).removeClass("mydesign");
+			}
+	};
+	$("h1").eq(1).on(obj);
+	$("h1").eq(2).hover(func1, func2);
+
+	function func1(){
+		$(this).addClass("mydesign");
+	}
+	function func2(){
+		$(this).removeClass("mydesign");
+		$(this).off("mouseenter");
+		$(this).off("mouseleave");
+	}
+	
+	
+	function call2(){
+		// alert("click 발생");
+		// $(this).html("click 발생");
+/* 		$(this).html(function(){
+			return "click 발생";
+		}); */
+		// $(this).html($(this).html() + "정신나갈거같애");
+ 		$(this).html(function(idx, aa){
+			return aa + "정신나갈거같애";
+		}); 
+	}
+	
+	function call(){
+		alert($(this).html());	// alert(this.innerHTML);		
+	}
+	
+	$("p:last-of-type").click(func3);
+	$("p:not(:last-of-type)").click(func4);
+	
+	function func3(){
+		$(this).html(function(a,b){
+			return b + "정신나갈거같애";
+		})
+	}
+	
+	function func4(){
+		$(this).html(function(a,b){
+			return b + "우에에엥도라에몽";
+		})
+	}
+	
+	$("#here>button:first-child").on("click",func5);
+	$("#here").on("click",function(){
+		alert("here누름");
+	});
+	
+	function func5(ev){
+		//alert(`버튼누름: x=${ev.pageX} y=${ev.pageY}`);
+		$("h1").eq(1).trigger("click");
+		ev.stopPropagation();	// 이벤트 전달 막기
+	}
+});
+
+
+
+</script>
+</head>
+<body>
+<h1>이벤트 연습1</h1>
+<h1>이벤트 <span>연습</span>2</h1>
+<h1>이벤트 연습 - hover</h1>
+<p>selector연습0</p>
+<p>selector연습1</p>
+<p>selector연습2</p>
+<hr>
+<div id="here">여기
+<button>버튼1</button>
+<button>버튼2</button>
+</div>
+</body>
+</html>

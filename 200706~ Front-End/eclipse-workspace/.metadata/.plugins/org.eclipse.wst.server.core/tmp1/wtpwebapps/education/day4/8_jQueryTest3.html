@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 브라우저임</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var arr = ["images/7.jpg","images/8.jpg","images/9.jpg"];
+	$("img").each(function(idx){
+/*  	$(this).attr("src",arr[idx]);
+		$(this).attr("width",function(){
+			return (idx+1)*100;
+		});  */
+		$(this).attr({
+			src:arr[idx],
+			width:function(){return (idx+1)*100;},
+			height:function(){return (idx+1)*50;}
+		});
+	});
+});
+$(function(){
+	$("#btn").click(function(){
+		$("div").html(function(idx){
+			return "<p>헤더" + idx + "</p>";
+		});
+	});
+	$("#delete").click(function(){
+		//$("p").remove();	// 태그까지 통째로 제거
+		$("p").empty();		// 태그 내용물만 비움
+	})
+	
+	$("#add").click(function(){
+		$("<p></p>").html("Hello").appendTo("body");
+	})
+});
+</script>
+
+
+</head>
+<body>
+<p>p태그입니다.</p>
+<button id="delete">DELETE</button>
+<button id="add">ADD</button>
+<img src="" width=""><br>
+<img src="" width=""><br>
+<img src="" width=""><br>
+<button id="btn">객체추가</button>
+<div id="here"></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<style>
+
+#outer{
+  width : 300px;
+  height: 200px;
+  border: 5px dotted red;
+}
+#inner1, #inner2{
+  width:100px;
+  height: 50px;
+  border:2px solid blue;
+  margin: 10px;
+}
+</style>
+<head>
+    <script>
+        window.onload = function() {
+            var outer = document.getElementById("outer");
+            var inner2 = document.getElementById("inner2");
+            outer.addEventListener("click", function(e) {
+                console.log("outer bubbling");
+            }, false);
+            outer.addEventListener("click", function(e) {
+                console.log("outer capturing");
+            }, true);
+            inner2.addEventListener("click", function(e) {
+            	event.stopPropagation();	// 이벤트 전파를 막는다: outer bubbling X
+                console.log("inner2 bubbling");
+            }, false);
+        };
+    </script>
+</head>
+<body>
+	<p onclick="alert('p click');">aaaaa<span onclick="alert('span click');">아이스크림</span>aaaaa</p>
+    <div id="outer">
+        outer
+        <div id="inner1">inner1</div>
+        <div id="inner2">inner2</div>
+    </div>
+<script>
+document.querySelector("span").onclick = function(e){
+	alert("span click");
+	e.stopPropagation();	// 이벤트 전파를 막는다: p bubbling X
+}
+</script>
+</body>
+</html>

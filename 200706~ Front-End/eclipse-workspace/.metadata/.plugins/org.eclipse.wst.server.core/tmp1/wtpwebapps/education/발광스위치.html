@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>발광스위치</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<button id="btn_on">발광ON</button>
+<button id="btn_off">발광OFF</button>
+<script>
+$("#btn_on").click(function(){
+	ret = setInterval(function(){
+			var idx = Math.floor(Math.random()*16777216);
+			idx = "#" + idx.toString(16);
+			$("html").css("backgroundColor",idx);
+		}, 100)
+})
+
+$("#btn_off").click(function(){
+	clearInterval(ret);
+	$("html").css("backgroundColor","#FFFFFF");
+})
+
+</script>
+</body>
+</html>

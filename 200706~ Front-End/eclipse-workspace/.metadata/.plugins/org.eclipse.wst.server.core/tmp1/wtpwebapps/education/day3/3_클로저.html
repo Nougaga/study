@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>클로저</title>
+</head>
+<body>
+<input type="button" value="버튼0">
+<input type="button" value="버튼1">
+<input type="button" value="버튼2">
+<input type="text" value="클로저연습">
+
+
+<script>
+// 이름 공간을 이용해서  global 오염 방지
+var myApp = myApp || {};
+myApp.name = "나의 공간"
+myApp.f = function(){};
+// 함수를 이옹해서 이름 공간 만들기
+var x = "global x";
+(function(){
+	var x= "local x";
+	var y= "local y";
+})();
+console.log(x);
+// console.log(y);
+
+// 모듈을 이용
+var myModule = myModule || {};
+(function(_my){
+	var name = "NoName";
+	function getName(){
+		return name;
+	}
+	_my.showName = function(){
+		console.log(getName());
+	};
+	_my.setName = function(na){
+		name = na;
+	};
+})(myModule);
+myModule.showName();
+myModule.setName("이름변경");
+myModule.showName();
+var bs = document.querySelectorAll("input[type='button']");
+/*	// 방법 1
+	for(let i=0; i<bs.length; i++){
+	bs[i].onclick = function(){
+		alert(i+1 + "번째");
+	};
+}*/
+
+// 방법 2
+for(var i=0; i<bs.length; i++){
+	(function(aa){
+		bs[i].onclick = function(){
+			alert(aa + "번째");
+		}
+	})(i);
+}
+
+function makeCounter(x){
+	var count = x;
+	return f;
+
+	function f(){
+		return ++count;
+	}
+}
+
+var a = makeCounter(0);
+console.log(a());
+console.log(a());
+console.log(a());
+var a2 = makeCounter(100);
+console.log(a2());
+console.log(a2());
+console.log(a2());
+
+
+function Person(name,age){
+	// 이름짓기 관례: _지역변수
+	var _name = name;
+	var _age = age;
+	
+	return {
+		getName: function(){return _name;},
+		getAge: function(){return _age;},
+		setName: function (n){_name=n;},
+		setAge: function(a){_age=a;}
+	}
+}
+
+var p1 = new Person("홍길동", 20);
+console.log(p1.getName());
+console.log(p1.getAge());
+p1.setName("고길동");
+p1.setAge(33);
+console.log(p1.getName());
+console.log(p1.getAge());
+</script>
+</body>
+</html>

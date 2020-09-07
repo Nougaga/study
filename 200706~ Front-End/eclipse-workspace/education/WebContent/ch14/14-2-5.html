@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <p id="controls">
+            <input type="button" value="click" onclick="doSomething();">
+            <input type="text" value="입력하세요.">
+        </p>
+        <script>
+            // var para = document.getElementById("controls");
+            var para = document.querySelector("#controls");
+            var list = para.firstElementChild.attributes;	// nodelist(유사 배열)
+            for(var i=0; i<list.length; i++) {
+                console.log(list[i].name + ": " + list[i].value);
+            }
+        </script>
+    </body>
+    </html>
+<!--// type：button-->
+<!--// value：click-->
+<!--// onclick：doSomething();-->

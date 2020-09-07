@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<script>
+
+// 값의 전달
+var a = 10, b = a;
+a++;
+console.log("a = " + a + " b = " + b);
+
+// 주소의 전달
+var obj = {name:"홍길동", age:20};
+var obj2 = obj;
+obj2.age = 30;
+console.log("obj.age = " + obj.age + 
+			" obj2.age = " + obj2.age);
+
+function call(obj3){
+	obj3.age = 40;
+}
+call(obj);
+console.log("obj.age = " + obj.age + 
+			" obj2.age = " + obj2.age);
+
+</script>
+</body>
+</html>

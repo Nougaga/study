@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>함수2</title>
+</head>
+<body>
+<script>
+var name = "찐";
+var obj = {
+		name: "TOM",
+		sayHello: function(){
+			alert(this.name);
+		}
+};
+var obj2 = {name:"한가람"};
+obj2.sayHello = obj.sayHello;	// obj2에 메서드 복제
+obj2.sayHello();
+
+console.log(name," ",obj.name);
+obj.sayHello();
+console.log("window: "+this);
+console.dir(this);
+
+console.log(obj);
+console.log(obj2);
+
+function Person(name,age){
+	this.name=name;
+	this.age=age;
+}
+Person.prototype.intro = function(){
+	alert("내 이름은 " + this.name);
+}
+var p = new Person("두영", 30);
+p.name = "국기";
+p.intro();
+
+var p2 = new Person("민지", 30);
+console.log(p);
+console.log(p2);
+</script>
+</body>
+</html>

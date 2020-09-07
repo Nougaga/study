@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+window.onload = f
+	
+function f(){
+	console.log("load_END");
+	var b1 = document.getElementById("btn1");
+	b1.onclick = f2;	// 단순할당
+	// b1.onclick = f2();// 벌써 실행시킬 수 없음
+	function f2(){
+		alert("버튼1 누름")
+		console.log("btn1_onclick");
+	}
+	
+	btn2.onclick = function(){
+		var a=10, b=20;
+		here.innerHTML += `a=${a} b=${b} total=${a+b}`;
+		
+		var today = new Date();
+		here.innerHTML += `<br>오늘은 ${today}`;
+		here.innerHTML += `<br>오늘은 ${today.getMonth()+1}월
+			${today.getDate()}일
+		`;
+		console.log("btn2_onclick");
+	};
+
+};
+// test_func();	// 함수라고 결정되지 않아서 error
+var test_func = function() {
+	alert("익명 함수");
+};
+call();
+function call(){
+	alert("이름이 있는 함수");
+};
+</script>
+</head>
+<body>
+
+<button id="btn1">버튼1</button>
+<button id="btn2">버튼2</button>
+<button id="btn3">버튼3</button>
+<div id="here">여기</div>
+
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+window.onload = function(){
+	btn1.onclick = function(){
+		var age = prompt("나이를 입력하세요", 20);
+		alert("당신의 만 나이는 " + (age -1));
+	};
+	btn2.onclick = function(){
+		var result = confirm("이해하시겠습니까?");
+		alert(result);
+	};
+	btn3.onclick = function(){
+		var arr = document.getElementsByTagName("h1");
+		var arr = document.querySelectorAll("h1#aa");	// 이게 좋음
+		var arr = document.querySelectorAll("h1.bb");
+		var arr = document.getElementsByClassName("bb");
+		console.log(arr);
+		for(var i=0; i<arr.length; i++){
+			arr[i].style.color = "green";
+		};
+	};
+	var bgarr = ["magenta", "yellow", "cyan", "black", "white"];
+	var ret;
+	btn4.onclick = function(){
+		setTimeout(function() {
+			here.innerHTML = new Date();
+			var idx = Math.floor(Math.random()*bgarr.length);
+			document.bgColor = bgarr[idx];
+		}, 1000);
+	};
+	btn5.onclick = function(){
+		ret = setInterval(function(){
+		here.innerHTML += "<br>"+new Date();
+		var idx = Math.floor(Math.random()*16777216);
+		document.bgColor = "#" + idx.toString(16);
+		console.log(document.bgColor);
+		}, 1000)
+		};
+				
+	window.onmousemove = function(){
+		clearInterval(ret);
+	};
+};
+</script>
+<style>
+/* {}: selector
+ * #는 ID
+ * .은 클래스
+ */
+h1#aa{
+	border:2px dotted red;
+}
+.bb{
+	background-color: orange;}
+	
+	
+</style>
+</head>
+<body>
+<h1 id="aa">DOM요소 찾기</h1>
+<h1 class="bb">DOM요소 찾기</h1>
+<h1 class="bb">DOM요소 찾기</h1>
+<button id="btn1" class="bb">prompt</button>
+<button id="btn2">confirm</button>
+<button id="btn3">selector이용(DOM요소찾기)</button>
+<button id="btn4">setTimeout</button>
+<button id="btn5">setInterval</button>
+<div id="here">여기</div>
+</body>
+</html>

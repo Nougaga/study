@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<script>
+
+var a = 10;
+
+// 생성자 함수(형식 매개변수들...): 생성자 함수의 첫글자 대문자는 관례
+function Card(name, rank){
+	// attribute
+	this.name=name;
+	this.rank=rank;
+	
+	// global variable
+	name2=name;
+	
+	// method
+	this.show = function(){
+		alert(this.name+" --- >"+this.rank);
+	}
+};
+
+// instance
+var c1 = new Card("하트1", "A1");
+var c2 = new Card("하트2", "A2");
+
+console.log(`name2=${name2}`);
+console.log(`c1.name2=${c1.name2}`);	// c1에 name2 속성 추가, undefined
+console.log(`c2.name2=${c2.name2}`);	// c2에 name2 속성 추가, undefined
+
+c1.show();
+c2.show();
+
+var call2 = function(){
+	console.log("리터럴 함수");
+};
+
+function call(){
+	// 문장들의 묶음...반복 수행을 위해 or 모듈화를 위해
+	console.log("선언적 함수");
+	
+};
+
+</script>
+</body>
+</html>

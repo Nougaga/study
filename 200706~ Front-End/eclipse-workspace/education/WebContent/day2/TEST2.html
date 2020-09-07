@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>BMI 계산기</h2>
+키: <input type="number" id="height" placeholder="키"> m<br>
+몸무게: <input type="number" id="weight" placeholder="몸무게"> kg<br>
+당신의 체질량지수는 <output id="ret_bmi">???</output>입니다.<br>
+<button id="btn_cal">계산</button>
+<script>
+btn_cal.onclick = function(){
+	var h = parseFloat(document.querySelector("#height").value);
+	var w = parseFloat(document.querySelector("#weight").value);
+	var bmi = (w/h/h*10000).toFixed(1);
+	
+	document.querySelector("#ret_bmi").value = bmi;
+};
+</script>
+</body>
+</html>

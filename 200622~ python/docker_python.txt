@@ -1,0 +1,1 @@
+docker pull zmni123/python_basic:latest

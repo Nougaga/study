@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>연산자 연습</title>
+</head>
+<body>
+<script>
+var a=10;
+var b="10";
+console.log(a==b);	// 값만 비교: type 달라도 됨
+console.log(a===b);	// 값과 type 둘 다 비교
+
+//앞항 연산으로 결과가 정해지면 뒷항까지 연산이 안 됨
+var result = a>10 && ++a>11;
+console.log(result, "a=" + a);	// F, a=10
+var result = a>=10 && ++a>11;
+console.log(result, "a=" + a);	// F, a=11
+var result = a>=11 || ++a>99;
+console.log(result, "a=" + a);	// T, a=11
+var result = a>11 || ++a>99;
+console.log(result, "a=" + a);	// F, a=12
+
+var result = Boolean("0") || 100;
+console.log(result);	// true
+var result = Boolean(0) || 100;
+console.log(result);	// 100
+
+function call(x){
+	x = x||100;
+	return x+200;
+}console.log(call(1));
+
+var y;
+console.log("U: ", Boolean(y), Boolean(String(y)));
+
+// 3항연산자
+result = a>=10 ? "OK" : "NO";	// if(a>=10){result="OK"} else{result="NO"};
+console.log(result);
+
+var s = "x=10; y=20; z=x+y; alert(z);";
+eval(s);
+
+</script>
+</body>
+</html>

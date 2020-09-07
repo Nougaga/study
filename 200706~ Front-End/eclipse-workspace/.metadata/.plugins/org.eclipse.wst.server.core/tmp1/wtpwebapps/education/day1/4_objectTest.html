@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+
+var a = 1000;	// local이 Window...global의 의미
+b = 200;		// global
+function call(){
+	console.log("hoisting var c");
+	var c = 30;	// local...함수 내에서만 유효
+	d = 4;		// global
+}
+call();
+console.log(a+b+d);
+console.dir(window);
+
+window.onload = function(){
+	// 모든 객체는 Object라는 객체를 상속받음
+	var obj = {name:"홍길동", age:20};
+	
+	btn4.onclick = function(){
+		var person = {name: "동홍길", subject:"산업공학과"};
+		person.grade = 4;
+		person.study = function(s){+2
+			here.innerHTML += s + " 열공~";
+		};
+		// 속성 접근
+		here.innerHTML = "이름은 " + person.name + " 전공은 " + person["subject"] + "<br>";
+		// 함수 실행
+		person.study("JavaScript");
+	};
+		
+	btn3.onclick = function(){
+		obj.go = function(){
+			alert("obj의 go함수");
+		};
+		obj.toString = function(){
+			return "Object Return"
+			console.log("Object.toString")
+		};
+		obj.go();
+		here.innerHTML += "<br>" + obj;
+	};
+	
+	btn2.onclick = function(){
+		here.innerHTML = "name2" in obj;
+		here.innerHTML += "<br>" + ("toString" in obj);
+		here.innerHTML += "<br>" + obj.toString();	// Object로부터 상속받은 함수
+	}
+	
+	btn1.onclick = function(){
+
+		obj.name = "길홍동";
+		obj.score = 100
+		
+		console.log(`이름은 ${obj.name}`);
+		console.log(`나이는 ${obj["age"]}`);
+		here.innerHTML = `이름은 ${obj.name}
+					나이는 ${obj["age"]}
+					점수는 ${obj.score}`;
+	};
+};
+
+var a2 = function(){};
+console.log(a2, typeof(a2));
+
+</script>
+</head>
+<body>
+<button id="btn1">버튼1</button>
+<button id="btn2">버튼2(in연산자)</button>
+<button id="btn3">버튼3(함수추가)</button>
+<button id="btn4">버튼4</button>
+<div id="here"></div>
+</body>
+</html>

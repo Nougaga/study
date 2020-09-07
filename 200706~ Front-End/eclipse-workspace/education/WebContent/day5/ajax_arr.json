@@ -1,0 +1,15 @@
+{
+	"finalScore": [{
+			"subject": "python",
+			"score": 99
+		},
+		{
+			"subject": "SQL",
+			"score": 100
+		},
+		{
+			"subject": "javascript",
+			"score": 100
+		}
+	]
+}

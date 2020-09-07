@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        window.onload = function() {
+            function Person(name) {
+                this.name = name;
+            };
+            Person.prototype.sayHello = function() {
+                console.log("Hello! " + this.name);
+                // console.log(this);
+            }
+            
+            var p1 = new Person("고길동");
+            p1.sayHello();
+            var p2 = new Person("홍길동");
+            p2.sayHello();
+            
+            var person = new Person("Tom");
+            var button = document.getElementById("button");
+            // button.addEventListener("click", person.sayHello, false);
+            button.addEventListener("click", person.sayHello.bind(p2), false);          
+
+        };
+    </script>
+</head>
+<body>
+    <p>
+        <button id="button">버튼</button>
+    </p>
+</body>
+</html>

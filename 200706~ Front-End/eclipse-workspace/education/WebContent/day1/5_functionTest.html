@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>I'm DEAD</title>
+<script>
+window.onload = f;
+
+// 명시적 함수 정의
+function f(){
+	// 버튼1
+	btn1.onclick = function(){
+		call();
+		function call(){
+			here.innerHTML = "인자X,리턴X";
+			// return;
+		}
+	};
+	
+	// 버튼2
+	btn2.onclick = function(){
+		call(10,2);
+		call(999);	// parameter y 자리에 undefined
+		function call(x,y){
+			here.innerHTML = "인자O, 리턴X " + y + x;
+		};
+	};
+	
+	// 버튼3
+	btn3.onclick = function(){
+		var result = call(100,200);
+		here.innerHTML = "리턴O " + result;
+		function call(x,y){
+			return x+y;
+		};
+	};
+	
+	// 버튼4
+	btn4.onclick = function() {
+		var call = function(a,b,c){
+			return a+b+c;
+		};
+		var result = call(100,20,3);
+		here.innerHTML = "literal함수...인자X, 리턴O " + result;
+	};
+
+	
+	// 익명...1회성
+	btn5.onclick = function(){
+		console.log((function(x,y){return x*y})(100,20));
+	};
+	
+};
+// 익명 함수
+var f2 = function(){};
+
+
+</script>
+</head>
+<body>
+<button id="btn1">버튼1(인자X)</button>
+<button id="btn2">버튼2(인자O)</button>
+<button id="btn3">버튼3(인자O,리턴O)</button>
+<button id="btn4">버튼4(리터럴)</button>
+<button id="btn5">버튼5(익명)</button>
+<button id="btn6">함수호출</button>
+<button id="btn7">함수호출(이름주의)</button>
+<hr>
+<div id="here"></div>
+<script>
+btn7.onclick = function(){
+	alert(f);
+	var f = 100;
+	alert(f);
+	var f = "js";
+	alert(f);
+	function f(){
+		alert("함수");
+	};
+	alert(f);
+	f();	// error: f = "js"(string)
+};
+
+btn6.onclick = function(){
+	var p1 = {x:1, y:2};
+	var p2 = {x:3, y:4};
+	var d = dist(p1, p2);
+	here.innerHTML = "두 점의 거리는 " + d;
+};
+
+function dist(obj1, obj2){
+	var xx = obj2["x"] - obj1.x;
+	var yy = obj2.y - obj1["y"];
+	return Math.sqrt(xx*xx + yy*yy);
+}
+	
+</script>
+</body>
+</html>

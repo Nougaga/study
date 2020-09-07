@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 브라우저임</title>
+<script src=
+	"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script>
+$(function(){
+	// alert("1");
+});
+$(function(){
+	// alert("2");
+	$("h1:even").css("color","red");
+	$("h1").css({"border":"1px solid green",
+				"backgroundColor":"pink"});
+
+	var a = $("select>option:selected").val() ;
+	$("h1").html(a);
+	
+	$("#btn").click(function(){
+		$("h1").html($("select>option:selected").val());
+	});
+	
+});
+
+</script>
+</head>
+<body>
+<h1>123</h1>
+<h1>456</h1>
+<h1>789</h1>
+<div id="here"></div>
+<button id="btn">읽기</button>
+<select>
+<option value="monday">월요일</option>
+<option value="tuesday" selected="selected">화요일</option>
+<option value="wednesday">수요일</option>
+<option value="thursday">목요일</option>
+<option value="friday">금요일</option>
+<option value="saturday">토요일</option>
+<option value="sunday">일요일</option>
+</select>
+
+</body>
+</html>
+

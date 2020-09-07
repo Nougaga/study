@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>op.gg</title>
+</head>
+<body>
+<h1>사칙연산(eval함수이용)</h1>
+<input type="number" id="input1">
+<select id="op">
+	<option value="+">더하기</option>
+	<option value="-">빼기</option>
+	<option value="*">곱하기</option>
+	<option value="/">나누기</option>
+</select>
+<input type="number" id="input2">
+<button id="btn">=</button>
+<input type="number" id="res" disabled="disabled">
+
+<script>
+btn.onclick = cal_op;
+function cal_op(){
+	var s = input1.value + op.value + input2.value;
+	console.log(s);
+	res.value = eval(s);
+};
+</script>
+</body>
+</html>

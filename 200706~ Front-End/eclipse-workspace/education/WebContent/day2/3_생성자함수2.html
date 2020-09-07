@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+
+window.onload = f;	// onload속성에 등록된 함수에서 f()
+
+var PI = Math.PI;
+function Circle(center, rad){
+	this.center = center;
+	this.radius = rad;
+	this.area = function(){
+		return this.radius * this.radius * PI;
+	};
+	this.minDistance = function(){
+		var x = this.center.x;
+		var y = this.center.y;
+		return Math.sqrt(x*x+y*y)-this.radius;
+	};
+	this.show = function(){
+		alert("중심점은 (" + this.center.x + "," + this.center.y+")");
+	};
+};
+
+function f(){
+	btn.onclick = function(){
+		var xx = Number(document.getElementById("input_x").value);
+		var yy = Number(document.getElementById("input_y").value);
+		var rr = Number(document.getElementById("input_rad").value);
+		var c1 = new Circle({x:xx,y:yy},rr);
+		c1.show();
+		document.getElementById("here").innerHTML = `면적: ${c1.area()}`;
+		document.getElementById("here").innerHTML += `<br>최단거리: ${c1.minDistance()}`;
+		
+		var c2 = new Circle({x:2,y:3},4);
+		console.dir(c1);
+		console.dir(c2);
+	};
+};
+
+</script>
+</head>
+<body>
+X:	<input type="number" id="input_x"><br>
+Y:	<input type="number" id="input_y"><br>
+RAD:<input type="number" id="input_rad"><br>
+<input type="button" id="btn" value="계산"><br>
+<button id ="btn2">날짜</button>
+<button id="btn3">숫자변경</button>
+<div id="here">여기에 결과가 나옵니다.</div>
+<script>
+
+btn2.onclick = function(){
+	var d1 = new Date();
+	here.innerHTML = d1.getFullYear() + "/" + 
+					(d1.getMonth()+1) + "/" + d1.getDate();
+};
+
+btn3.onclick = function(){
+	var price = "100달러";
+	here.innerHTML += parseInt(price);
+}
+
+/* Number()
+ * parseInt()
+ */
+
+</script>
+</body>
+</html>

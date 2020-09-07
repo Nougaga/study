@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 브라우저</title>
+</head>
+<body>
+<input type="text" id="user">
+<button id="btn">Ajax-JS</button>
+<div id="here">여기</div>
+<script>
+btn.onclick = function(){
+	// 1. 객체생성
+	var xhr = new XMLHttpRequest();
+	// 2. 처리등록
+	xhr.onreadystatechange = function(){
+		// 응답이 정상적(status 200)으로 도착(readyState 4)
+		if(xhr.readyState == 4 && xhr.status == 200){
+			here.innerHTML = xhr.responseText;
+		}
+	}
+	// 3. 요청URL
+	//xhr.open("get", "ajax.txt");
+	//xhr.open("get", "ajax.json");
+	xhr.open("get", "ajax.jsp?username=" +user.value);
+	// 4. 요청
+	xhr.send(null);
+};
+
+</script>
+</body>
+</html>

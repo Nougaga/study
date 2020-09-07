@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="favorite">
+            <input type="checkbox" name="dog" value="pome">포메라니안<br>
+            <input type="checkbox" name="dog" value="dalma">달마시안<br>
+            <input type="checkbox" name="dog" value="bool">불독<br>
+            <input type="button" id="exec" value="실행">
+        </form>
+        <script>/* 
+            var result = [];
+            var fm = document.getElementById("favorite");
+            var list = fm.children;
+            for(var i=0; i<list.length; i++) {
+                if(list[i].nodeName == "INPUT" && list[i].type == "checkbox") {
+                    result.push(list[i].getAttribute("value"));
+                }
+            } 
+            console.log(result.join(",")); // → pome,dalma,bool
+            */
+            
+            exec.onclick = function(){
+            var result = [];
+            var list = document.querySelectorAll("#favorite>input[type='checkbox']:checked");
+            for (var i=0; i<list.length; i++){
+            	result.push(list[i].value);
+            }
+            alert(result.join("**"));
+            }
+            
+            
+        </script>
+    </body>
+</html>

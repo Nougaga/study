@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSON</title>
+</head>
+<body>
+<script>
+// JSON(JavaScript Object Notation)
+// JavaScript Object 형태의 문자열
+var obj = {name:"홍길동", age:20};
+var s = JSON.stringify(obj);
+console.log(s+"==>"+typeof(s));
+console.log(obj.name);
+console.log(s.name);
+var obj2 = JSON.parse(s);
+console.log(obj2);
+console.log(obj2.name);
+</script>
+</body>
+</html>
