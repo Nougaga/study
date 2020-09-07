@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div id=""></div>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $.ajax({
+        url: 'http://ggoreb.com/dinosaur/info.jsp',
+        success: function(data){
+            var d = data[0].dinosaurs;
+            var ret="";
+            for(var i=0; i<d.length; i++){
+                var title = d[i].title;
+                var img = d[i].imgs[0];
+                ret += '<p>'+title+'</p>';
+                $("div").append(`<img src='http://ggoreb.com/dinosaur/images/${img}'>`);  //back tick
+                console.log(title);
+            }
+            $("dir").append(ret);
+        },
+    });
+</script>
+</body>
+</html>

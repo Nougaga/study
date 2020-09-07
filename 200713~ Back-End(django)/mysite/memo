@@ -1,0 +1,10 @@
+
+서비스 구조 표현용
+ - class diagram: class
+ - ERD: DB
+
+
+static 사용(정적 파일 사용)
+ - Bootstrap 등으로 디자인한 후 프로젝트에 적용할 때
+
+

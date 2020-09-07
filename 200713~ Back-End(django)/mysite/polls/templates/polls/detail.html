@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>{{ question.question_text }}</h1>
+    <!-- action, method, enctype -->
+    <!-- <form id="radio_choice" action="/{{question.id}}/vote/" method="POST"> -->
+    <form id="radio_choice" action="{% url 'vote' question.id %}" method="POST">
+        {% csrf_token %}
+        {% for choice in question.choice_set.all %}
+        <!-- input, select, textarea -->
+        <input type="radio" name="choice" id="{{choice.id}}" value={{choice.id}}>
+        <label for={{choice.id}}>{{ choice.choice_text }}({{choice.votes}})</label>
+        {% endfor %}
+        <input type="submit" value="전송" id="send"><br>
+        <input type="button" id="reset" value="초기화1">
+    </form>
+    <form id="reset2" action="{% url 'reset' question.id %}">
+        <input type="submit" value="초기화2">
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $('#send').click(() => {
+            $.ajax({
+                url: "{% url 'vote' question.id %}",
+                type: 'POST',
+                data: $('form:eq(0)').serialize(),
+                success: () => {
+                    location.reload();
+                }
+            });
+            return false;
+        })
+
+
+
+
+
+
+
+        $("[type=button]").click(() => { $("#reset2").submit() }) // jQuery
+    // document.querySelector("[type=button]")
+    //         .addEventListener("click",function(){
+    //             // location = '/polls/{{question.id}}/reset/';  // GET 방식으로 주소 직접 입력
+    //             var r = document.querySelector("#reset2");
+    //             r.submit();
+    //         })
+    </script>
+</body>
+
+</html>

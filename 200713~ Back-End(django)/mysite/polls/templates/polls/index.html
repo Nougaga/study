@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{font-family:"나눔바른고딕"}
+    </style>
+</head>
+
+<body> 
+
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'polls/style.css'%}">
+    <p>{{request.session.user_id}}님, 반갑습니다.</p>
+    {% if latest_question_list %}
+    <ul>
+        {% for question in latest_question_list %}
+        <!-- <a href="/polls/{{question.id}}">{{question.question_text}}</a> -->
+        <li><a href="{% url 'detail' question.id %}">{{question.question_text}}
+        ({{question.choice_set.count}})
+        </a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No polls are available.</p>
+    {% endif %}
+
+
+
+</body>
+
+</html>
