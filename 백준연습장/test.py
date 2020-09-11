@@ -1,11 +1,19 @@
-def rot_key(key):
-    res = list()
-    M = len(key)
-    for i in range(M):
-        res.append(list())
-        for j in range(M):
-            res[i].append(key[j][M-1-i])
-    return res
+class Node:
+    def __init__(self):
+        self.data=None
+        self.child=list()
 
-key = [[0, 0, 0], [1, 0, 0], [0, 1, 1]]
-rot_key(key)
+    def setData(self,data:str):
+        self.data=data
+
+    def getData(self):
+        return self.data
+
+    def addChild(self,child:Node):
+        self.child.append(child)
+    
+
+A = Node()
+B = A
+
+print(id(A)==id(B))
