@@ -1,0 +1,292 @@
+---
+title: 표준정규분포, 가설 검정
+date: 2020-08-11
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(max.print=10)
+```
+
+## **표본정규분포(Standard Normal Distribution)**
+
+### **중심극한정리**
+
+  + 모집단이 정규분포를 따르지 않아도 n이 충분히 크다면 표본평균은 정규분포를 따라감
+
+```{r echo=F}
+library(dplyr)
+```
+```{r}
+li = seq(0,9,by=1)
+sp = c()
+sp_sum = c()
+sp_mean = c()
+
+for (i in 1:100){
+  sp <- append(sp, sample(li, size=5, replace=T))
+}
+
+sp <- matrix(sp, ncol=5, byrow=T)
+sp <- as.data.frame(sp)
+sp <- sp %>% mutate(sum=apply(sp,1,sum))  # sp$sum <- apply(sp,1,sum)
+sp <- sp %>% mutate(mean=sum/5)
+
+
+
+hist(sp$mean, labels=T, freq=F, ylim=c(0,0.35), col="green");lines(density(sp$mean))
+
+```
+
+#### 대립가설, 귀무가설, p-value, 유의수준
+
+  + 대립가설: 증명하고 싶은 가설
+  
+  + 귀무가설: 대립가설과 반대로 가설, 반증을 찾아서 대립가설을 증명
+  
+  + p-value: 귀무가설이 사실일 때 현상이 나타날 확률, 설정한 유의수준보다 작으면 귀무가설을 기각
+
+---
+
+---
+
+### 1. **가설검정**
+
+단일집단
+비율 - binom.test
+평균 - shapiro.test 후
+
+두집단
+비율 - prop.test
+평균 - var.test 후
+
+세집단
+비율 - prop.test
+평균 bartlett.test 후
+
+#### **1.1. 교차분석**
+
+
+범주형 자료를 대상으로 두 개 이상의 변수들에 대한 관련성을 알아보기 위해
+
+결합분포를 나타내는 교차분할표를 작성하고 이를 통해 변수 상호 간의 관련성 여부를 분석하는 방법이다.
+
+```{r}
+data <- read.csv("data\\cleanDescriptive.csv", header=T)
+dim(data); head(data)
+
+# 변수 리코딩
+x <- data$level2  # x = 부모의 학력 수준
+y <- data$pass2   # y = 자녀의 대학 진학 여부
+
+result <- data.frame(Level=x, Pass=y)
+dim(result); head(result)
+
+```
+```{r echo=F}
+library(gmodels)
+library(ggplot2)
+```
+```{r}
+# 교차분할표 작성
+gmodels::CrossTable(result$Level, result$Pass)
+table(result)
+
+```
+
+---
+
+
+
+#### **1.2. 카이제곱 검정**
+
+  + 범주별로 관측빈도와 기대빈도의 차이를 통해 확률 모형이 데이터를 얼마나 잘 설명하는지 검정
+  + 일원 카이제곱 검정
+    - 교차분할표 X이용, 한 개의 변인(집단 or 범주)을 대상으로 검정 수행
+    - 관찰도수와 기대도수가 일치하는지 검정 -> 적합도 검정
+    - 예) 주사위 게임, 선호도 분석
+  + 이원 카이제곱검정
+    - 교차분할표 O이용, 두 개 이상의 변인을 대상으로
+    - 독립성 검정: 한 집단 내에서 두 변인의 관계가 독립인지 검정
+      -> 귀무가설(H_0) 관계 X
+    - 동질성 검정: 두 집단 이상에서 각 범주 간의 비율이 서로 동일한 지를 검정
+      -> 귀무가설(H_0): 모든 표본들의 비율은 동일하다.
+
+
+
+
+
+#### **일원 카이제곱 검정**
+주사위 게임
+
+  + 대립가설: 기대치와 관찰치는 차이가 있다. (p<alpha) 즉, 주사위는 게임에 적합하지 않다.
+  
+  + 귀무가설: 기대치와 관찰치는 차이가 없다. (p>=alpha)즉, 주사위는 게임에 적합하다.
+
+ex)
+
+주사위 눈 | 1|2|3|4|5|6
+---|-|-|-|-|-|-
+관측도수|4|6|17|16|8|9
+기대도수|10|10|10|10|10|10
+
+
+```{r}
+chisq.test(c(4,6,17,16,8,9))
+# p-value = 0.01439 < 0.05이므로 유의수준 0.05에서는 귀무가설을 기각
+# => 대립가설 채택(주사위는 게임에 적합하지 않음)
+```
+  
+---
+  
+  
+#### **이원 카이제곱 검정**
+
+#### 독립성 검정
+불러온 데이터에서
+
+  + 대립가설(H1): 부모의 학력 수준과 자녀의 대학 진학 여부는 관련성이 있다.
+  
+  + 귀무가설(H0): 부모의 학력 수준과 자녀의 대학 진학 여부는 관련성이 없다.
+  
+```{r}
+data1 <- read.csv("data\\cleanDescriptive.csv", header=T)
+str(data1)
+x <- data1$level2   # 종속변수(설명변수)
+y <- data1$pass2    # 반응변수
+
+CrossTable(x, y, chisq = T)
+```
+
+
+
+---
+
+
+### **1. 단일집단 검정**
+#### **1.1. 단일집단 비율검정**
+
+  단일집단의 비율이 어떤 특정한 값과 같은지 검정하는 방법
+  
+  데이터 준비 --> 전처리 --> 기술통계 --> binom.test() --> 검정 통계량 분석
+  
+<실습>
+
+   + H1: 기존 2020년도 고객 불만률과 2019년도 CS 교육 후 불만률에 차이가 있다.
+   
+   + H0: 기존 2020년도 고객 불만률과 2019년도 CS 교육 후 불만률에 차이가 없다.
+   
+```{r}
+data <- read.csv("03stat_!\\one_sample.csv", header=T)
+head(data)
+
+x <- data$survey
+summary(x)  # 결측치 확인
+length(x)   # 길이(150) 확인
+table(x)    # 0: 불만족(14), 1: 만족(136)
+
+# 1. 양측검정 
+binom.test(c(136,14), p=0.8, alternative="two.sided", conf.level=0.95)
+
+# 2. 방향성을 갖는 단측가설 검정
+binom.test(c(136,14), p=0.8, alternative="greater", conf.level = 0.95)
+# 기존의 만족도 80%보다 높다는 비율검정(단측) 실시
+# 유의수준 5% 또는 1%에서 p-value(0.0003179)가 매우 작으므로 귀무가설을 기각
+```
+
+---
+
+#### **1.2. 단일집단 평균검정**
+  단일집단의 평균이 어떤 특정한 집단의 평균과 차이가 있는지를 검정
+  
+  + 정규성 검정(shapiro.test())을 실시하여 정규분포이면 t.test()
+  + 정규분포가 아니라면 wilcox.test()
+  + shapiro 테스트의 귀무가설은 "데이터가 정규성을 따른다"
+  
+<실습>
+
+   + 국내에서 생산된 노트북 평균 사용시간이 약 5.2h로 파악된 상황에서 A 회사에서 생산된 노트북 평균 사용시간과 차이가 있는지 검정하기 위해 A회사 노트북 150대를 랜덤하게 선정하여 검정을 실시한다.
+   
+   + H1: 국내에서 생산된 노트북과 A회사에서 생산된 노트북의 평균 사용시간에 차이가 있다.
+   + H0: 국내에서 생산된 노트북과 A회사에서 생산된 노트북의 평균 사용시간에 차이가 없다.
+   
+   
+```{r}
+data <- read.csv("03stat_!\\one_sample.csv", header=T)
+str(data); head(data)
+x <- data$time
+
+# 데이터 분포 확인, 결측치 제거
+summary(x)
+mean(x)
+
+# 데이터 정제
+mean(x, na.rm=T)
+x1 <- na.omit(x); mean(x1)
+
+# 정규분포 검정
+shapiro.test(x1)  # p값이 크므로 귀무가설을 기각하지 못하고 t.test 이용
+
+hist(x1)
+qqnorm(x1)
+qqline(x1, lty=1, col="blue")
+t.test(x1, mu=5.2)
+result <- t.test(x1,mu=5.2, alter="two.sided", conf.level=0.95)
+result
+
+```
+
+---
+
+### **2. 두 집단 검정**
+#### **2.1. 두 집단 비율검정**
+
+  데이터 분석 --> 전처리 --> 두 집단 subset 생성 -> prop.test() -> 검정통계량 분석
+  
+<실습>
+
+  + IP 교육센터에서 PT를 이용한 프리젠테이션 교육방법과 실시간 코딩 교육방법을 각각 적용,
+  더 효과적인 교육방법을 조사하기 위해 교육생 150명을 대상로 설문 실시
+  
+  + H1: 두 가지 교육방법에 따라 교육생의 만족률 차이가 있다.
+  
+  + H0: 두 가지 교육방법에 따라 교육생의 만족률 차이가 없다.
+
+분류|만족|불만족|참가자
+-|-|-|-
+PT | 110 | 40 | 150
+coding | 135 | 15 |150
+합계 | 245 | 55 | 150
+```{r}
+data <- data <- read.csv("03stat_!\\two_sample.csv", header=T)
+
+# 두 집단 subset 작성 및 데이터 전처리
+x <- data$method  #교육방법(1,2)-> 노이즈 x
+y <- data$survey  #만족도(1:만족,0:불만족)
+
+# 집단별 빈도분석
+table(x); table(y)
+
+# 교차분석
+table(x,y)
+CrossTable(x,y)
+
+# 비율검정 1. 양측 검정
+prop.test(c(110,135), c(150,150), alternative="two.sided", conf.level=0.95)
+# 비율검정 2. 방향성이 있는 단측설 검정
+prop.test(c(110,135), c(150,150), alternative="greater", conf.level=0.95) # p-value가 너무 커서 양측 검정이 나음
+```
+
+---
+
+#### **2.1. 두 집단 평균검정**
+
+var.test(집단1, 집단2) 결과에 따라 t.test(집단1, 집단2, var.equal=T or F)
+
+```{r}
+```
+
+
+
+

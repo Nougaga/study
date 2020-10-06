@@ -1,0 +1,334 @@
+---
+title: 데이터 전처리
+author: "Nougaga"
+date: 2020-08-05
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(max.print=10)
+```
+DataPreprocessing(데이터 전처리)
+
+  + 데이터를 불러온 후 입력된 자료에 오류가 없는지 확인하고, 특이한 형태의 데이터를 개략적으로 분석하는 과정이 필요하다. 이러한 분석과정을 통해 데이터를 정제하는 과정을 데이터 전처리라고 한다.
+
+
+### 1. 탐색적 데이터 조회
+
+#### 데이터 셋 보기
+
+```{r}
+dataset <- read.csv("data\\dataset.csv",
+                    header = T, stringsAsFactors = T)
+```
+```{r eval=F}
+# 데이터 파악
+head(dataset)
+summary(dataset)
+attributes(dataset)
+str(dataset)
+
+length(dataset$resident)
+table(is.na(dataset$resident))  # NA 갯수를 카운트
+```
+
+#### 조회결과 변수 저장
+
+```{r}
+x <- dataset$gender
+y <- dataset$price
+```
+
+#### 산점도 형태로 변수 조회
+```{r}
+plot(x,y)
+```
+
+#### ["column명"] 형식으로 특정 변수 조회
+
+```{r eval=F}
+dataset[,"gender"]  # vector
+dataset["gender"]   # data frame
+```
+
+#### 색인 형식으로 변수 조회
+```{r}
+dataset[6]
+dataset[,3]
+dataset[6,]
+dataset[3,6]
+```
+#### 특정 행/열을 조회하거나 조회하지 않음
+```{r}
+dataset[c("job","price")]
+dataset[c(2,6)]
+dataset[c(1:3)]
+dataset[c(2,4:6,3,1)]
+dataset[-c(2)]  # 1,3:7
+```
+
+### 2.결측치 NA
+
+#### 결측치 확인
+```{r}
+summary(dataset$price)  # NA 30개
+sum(dataset$price)      # NA로 출력됨
+```
+#### 결측치 제거
+```{r}
+# 1. 함수에서 제공되는 속성을 이용
+sum(dataset$price, na.rm=T)
+
+a <- seq(1:100)
+a[1] <- NA
+mean(a, na.rm=T)  # NA 행을 제외하고 실행
+
+# 2. na.omit 이용
+dataset_test <- na.omit(dataset)  # NA 들어있는 행마다 전부 제거
+dim(dataset_test)
+
+price2 <- na.omit(dataset$price)  # 특정 열의 NA만 처리하고 싶을 때
+```
+
+#### 결측치 대체
+```{r}
+# 0으로 대체
+x <- dataset$price
+dataset$price2 <- ifelse(!is.na(x),x,0)   # ifelse(is.na(x),0,x)
+x[1:30]; dataset$price2[1:30]
+
+# 평균으로 대체
+dataset$price3 <- ifelse(!is.na(x),x,round(mean(x,na.rm=T),2))
+x[1:30]; dataset$price3[1:30]
+
+a <- dataset[c("price","price2","price3")]
+subset(a, is.na(price))
+```
+
+### 3. 이상치(outlier) 처리
+```{r}
+# 범주형에서 이상치 확인
+(freq_ol <- table(dataset$gender))
+pie(freq_ol)    # 파이 차트
+
+# subset()을 이용한 데이터 정제
+dataset <- subset(dataset, gender==1 | gender==2)
+length(dataset$gender)    # 300 -> 297
+(freq_ol <- table(dataset$gender))
+pie(freq_ol, col=c('red','blue'))
+
+# 연속형 범주의 극단치 처리
+dataset2 <- subset(dataset, price>=2 & price <=8)
+dataset_ordered <- dataset2[order(dataset2$price),]
+plot(dataset_ordered$price,
+        ylim=c(0,8))
+```
+
+```{r}
+summary(dataset2$age)
+length(dataset2$age)
+dataset3 <- subset(dataset2, age>=20 & age <= 69)
+
+data_na <- na.omit(dataset2$age)
+length(dataset3$age); length(data_na)
+```
+
+```{r}
+tt <- data.frame(test=c(1,3,8,4,3,4,NA,9))
+tt$test <- ifelse(is.na(tt$test),round(mean(tt$test,na.rm=T),2),tt$test)
+```
+
+### 4. 코딩변경
+
+#### 가독성
+
+```{r}
+dataset2$resident2 <- ifelse(dataset2$resident==1,"1.서울특별시",
+                             ifelse(dataset2$resident==2,"2.인천광역시",
+                                    ifelse(dataset2$resident==3,"3.대전광역시",
+                                           ifelse(dataset2$resident==4,"4.대구광역시",
+                                                  ifelse(dataset2$resident==5,"5.시구군",NA)))))
+
+dataset2$resident2[dataset2$resident ==1] <- "1.서울특별시"
+dataset2$resident2[dataset2$resident ==2] <- "2.인천광역시"
+dataset2$resident2[dataset2$resident ==3] <- "3.대전광역시"
+dataset2$resident2[dataset2$resident ==4] <- "4.대구광역시"
+dataset2$resident2[dataset2$resident ==5] <- "5.시구군"
+
+dataset2$resident2 <- factor(dataset2$resident,
+                             levels=c(1,2,3,4,5),
+                             labels=c("1.서울특별시","2.인천광역시","3.대전광역시","4.대구광역시","5.시구군"))
+```
+
+#### 척도 변경
+
+```{r}
+dataset2$job2 <- factor(dataset2$job,
+                        levels=c(1,2,3),
+                        labels=c("공무원","회사원","개인사업"))
+
+dataset2$age2[dataset2$age <= 30] <- "청년층"
+dataset2$age2[dataset2$age > 30 & dataset2$age <= 55] <- "중년층"
+dataset2$age2[dataset2$age > 55] <- "장년층"
+dataset2$age2 <- as.factor(dataset2$age2)
+```
+
+#### 역코딩
+```{r}
+dataset2$survey2 <- max(dataset2$survey2) - dataset2$survey   # 점수 역변환
+```
+
+### 5.
+```{r}
+exam <- read.csv("data\\csv_exam.csv")
+```
+```{r eval=F}
+head(exam)
+tail(exam)
+View(exam)
+dim(exam)
+str(exam)
+summary(exam)
+```
+```{r}
+library(ggplot2)
+mpg <- as.data.frame(ggplot2::mpg)
+
+
+df_raw <- data.frame(var1 = c(1,2,1),
+                     var2 = c(2,3,2))
+library(dplyr)
+df_new <- df_raw
+df_new
+
+df_new <- rename(df_new, v2=var2)
+df_new
+
+df_new %>% rename(v1=var1)    # %>% dplyr 패키지의 기호
+df_new
+
+mpg$total <- (mpg$cty + mpg$hwy)/2
+hist(mpg$total)
+
+mpg$test <- ifelse(mpg$total >= 20, "pass", "fail")
+table(mpg$test)
+qplot(mpg$test)   # ggplot2에서 제공, table로 변환하지 않아도 빈도 수를 보여줌
+
+mpg$grade <- ifelse(mpg$total >= 30, "A",
+                    ifelse(mpg$total >= 20, "B","C"))
+mpg %>% head(10)
+mpg$grade %>% table
+mpg$grade %>% qplot
+
+mpg <- rename(mpg, company = manufacturer)
+```
+
+### 6.
+
+#### rename
+```{r}
+
+```
+
+#### filter
+```{r}
+exam %>% subset(class == 1)   # class가 1인 경우만을 추출
+exam %>% subset(class != 2)   
+exam %>% filter(class == 3)   # (dplyr::filter) class가 3인 경우만을 추출
+exam %>% filter(class != 4)   
+
+exam %>% filter(class==1 & math >= 50)
+exam %>% filter(class!=2 & english <= 80)
+exam %>% filter(math >= 90 | english >= 90)
+```
+
+#### select
+```{r}
+exam %>% select(math)   # math만을 추출
+exam %>% select(class, math, english)
+exam %>% select(-math, -english)
+```
+#### filter와 select의 혼합
+```{r}
+exam %>% 
+  filter(class==1) %>% 
+  select(english)
+
+exam %>% 
+  select(id,math) %>% 
+  head
+
+```
+#### arrange
+```{r}
+exam %>% arrange(math)    # math 기준으로 오름차순으로 정렬됨
+exam %>% arrange(desc(math))
+exam %>% arrange(class,math)
+```
+
+#### mutate
+
+```{r}
+exam %>% 
+  mutate(total=math+english+science) %>% 
+  head
+
+exam %>% 
+  mutate(total=math+english+science,
+         mean = (total=math+english+science)/(exam %>% length)) %>% 
+  head
+```
+
+#### summarise, group_by
+```{r}
+# 단일
+exam %>% summarise(mean_math=mean(math))
+
+# grouping
+exam %>% 
+  group_by(class) %>%                 # class별로 분리
+  summarise(mean_math=mean(math),     # 평균
+            sum_math=sum(math),       # 합계
+            median_math=median(math), # 중앙값
+            n=n())                    # 학생 수
+
+mpg <- rename(mpg, manufacturer = company)
+mpg %>% 
+  group_by(manufacturer,drv) %>% 
+  summarise(mean_cty = mean(cty)) %>% 
+  head(10)
+
+mpg %>% 
+  group_by(manufacturer) %>% 
+  filter(class == 'suv') %>% 
+  mutate(tot = (cty/hwy)/2) %>% 
+  summarise(mean_tot = mean(tot)) %>% 
+  arrange(desc(mean_tot)) %>% 
+  head(5)
+
+```
+
+#### join
+
+```{r}
+test1 <- data.frame(id=c(1,2,3,4,5),
+                    midterm=c(60,80,70,90,85))
+test2 <- data.frame(id=c(1,2,3,4,5,6),
+                    midterm=c(70,83,65,95,80,90))
+test1;test2
+
+total <- left_join(test1,test2,by="id")
+total
+
+total1 <- full_join(test1,test2, by="id")
+total1  # 6행 NA
+
+total2 <- right_join(test1,test2,by="id")
+total2  # 6행 NA
+```
+
+
+
+
+
