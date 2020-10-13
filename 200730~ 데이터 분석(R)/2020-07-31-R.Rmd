@@ -1,0 +1,364 @@
+---
+title: R 기본 2
+author: "Nougaga"
+date: 2020-07-31
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+[R Markdown Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.131128839.981889577.1596078609-636090901.1596078609)
+
+## **Array**
+다차원 구조를 가진 데이터를 만들 때 사용
+
+vector는 1차원 array, matrix는 2차원 array
+
+array로 3차원 이상의 데이터 구조를 만들 수 있다.
+
+
+```{r}
+arr1 <- array(1:12, dim=c(3,4))
+arr1
+
+arr2 <- array(1:12, dim=c(3,4), dimnames=list(c('r1','r2','r3'),c('c1','c2','c3','c4')))
+arr2
+```
+2차원 구조의 array는 matrix와 구조가 같다.
+```{r}
+mat1 <- matrix(1:12, nrow=3)
+mat1
+
+mat2 <- matrix(1:12, nrow=3, dimnames=list(c('r1','r2','r3'),c('c1','c2','c3','c4')))
+mat2
+```
+3차원 array
+```{r}
+arr3 <- array(1:12,dim=c(2,2,3))
+arr3
+```
+
+---------
+
+## **List**
+key-value 구조
+```{r}
+a <- list(name='GilDong', age=30, job='SalesManager')
+a
+```
+List는 성분의 길이가 같지 않아도 생성이 가능하다.
+```{r}
+b <- list(1:3, 'a', c(TRUE,FALSE,TRUE), c(2.3,5,9))
+b
+```
+unlist()로 list 구조를 해제할 수 있다.
+```{r}
+c <- unlist(a)
+c; str(c); class(c)
+```
+이는 아래와 같이 vector로도 표현할 수 있다.
+```{r}
+d <- c('Gildong',30,'SalesManager')
+names(d) <- c('name','age','job')
+d
+```
+
+## **Data frame**
+```{r}
+df <- data.frame(name='GilDong', age=20, job='SalesManager')
+df; str(df)
+
+df1 <- data.frame(name='GilDong', age=20, job='SalesManager',
+                  stringsAsFactors=FALSE) # 문자형을 factor형으로 취급하지 않음
+df1; str(df1)
+```
+column명 변경
+```{r}
+names(df1) <- c('Names','Age','Job')
+names(df1)[1] <- 'NAMES'
+names(df1)
+```
+데이터 타입(4가지):
+
++ 수치형(numeric: integer, double, ...)
++ 문자열형(character)
++ 범주형(factor)
++ 논리형(logical)
+
+데이터 구조(5가지):
+
++ vector
++ matrix
++ array
++ list
++ data frame
+
+참고자료: http://adv-r.had.co.nz/Data-structures.html
+
+----------------------
+
+matrix의 인덱싱
+```{r results='hide'}
+mat <- matrix(1:9, nrow=3, dimnames=list(c('a1','a2','a3'),c('b1','b2','b3')))
+
+# 2행 2열
+mat[2,2]
+mat['a2','b2']
+
+# 모든 행과 2,3열
+mat[1:3,2:3]
+mat[1:3,-1] # -1 : 1열을 제외함
+mat[,-1]
+mat[c('a1','a2','a3'),c('b2','b3')]
+
+# 2,3행과 1,2열
+mat[2:3,1:2]
+mat[-1,-3]
+mat[c('a2','a3'),c('b1','b2')]
+```
+
+array의 인덱싱
+
+```{r results='hide'}
+arr <- array(1:12, dim=c(2,2,3))
+
+# 첫 번째 matrix, 모든 행, 2열
+arr[,2,1]
+
+# 세 번째 matrix, 1행, 1열
+arr[1,1,3]
+
+# 모든 매트릭스, 2행, 2열
+arr[2,2,]
+
+```
+list의 인덱싱
+
+
+```{r results='hide'}
+li <- list(name=c('GilDong', 'SeDol'),
+           age=c(30,35),
+           job=c('SalesManager','GoPro'))
+
+# 첫 번째 키(name)의 두 번째 성분 = "SeDol"
+li[[1]][2]
+li$name[2]
+```
+
+```{r}
+li <- list(name=c('GilDong', 'SeDol'),
+           age=c(30,35),
+           job=c('SalesManager','GoPro'))
+li
+```
+
+data frame에서 접근방법
+
+ + matrix처럼 [,]
+ + list처럼   $
+```{r}
+df <- data.frame(name=c('GilDong', 'SeDol'),
+                 age=c(30,35),
+                 job=c('SalesManager','GoPro'))
+
+df[,1]
+df[,'name']
+df$name
+df$n  # df에서 제공하는 matching기능
+```
+
+
+> ## **데이터를 다루는 기본 함수**
+##### 대다수의 데이터가 수치, 문자열, 팩터 자료형을 혼합하여 가지고 있어서
+우리가 다룰 데이터의 구조는 거의 data frame
+
+
+```{r results='hide'}
+new_mem <- data.frame(name=c("heungMin", "HyunJin", "JiSung", "ChanHo"),
+                      age=c(27,31,40,45),
+                      job=c("FootballPlayer","BaseballPlayer","FootballPlayer","BaseballPlayeer"))
+# 1. df에 행(사람) 추가
+df <- rbind(df,new_mem)
+df
+# 2. df에 열(국적,도시) 추가
+new_nat <- data.frame(nationality=c("Korea","Korea","Korea","Korea","Korea","Korea"))
+df <- cbind(df,new_nat)
+df$city <- c("한양","서울","토트넘","LA", "서울","서울")
+df
+```
+l
+```{r results='hide'}
+# bind, 데이터 수정 연습
+df$surname = c("Hong", "Lee", "Son", "Ryu", "Park", "Park")
+df$city <- c("Hanyang","Seoul","Tottenham","LA", "Seoul","Seoul")
+df$age[1] <- 34
+df$nationality <- as.character(df$nationality)
+df$nationality[1]  <- "Chosun"
+df
+```
+
+### Sorting
+```{r}
+a <- runif(10)
+seque <- 1:10
+a_df <- data.frame(num=a, sequence=seque)
+b_df <- a_df[order(a_df$num, decreasing=T),]
+a_df; b_df
+```
+
+
+
+
+> # **데이터 불러오기**
+
+```{r results='hide', echo=FALSE}
+if (!require(rJava) || !require(xlsx))
+  install.packages(c('rJava','xlsx'))
+```
+```{r}
+library(rJava)
+library(xlsx)
+```
+### **텍스트 파일**
+#### read.table로 불러오기
+```{r eval=F}
+student <- read.table(file='data\\student.txt', sep="")  # header=F
+student
+
+# 작업 경로를 변경해서 파일 참조를 쉽게 하기
+getwd()
+setwd('data'); getwd()
+
+# header가 있을 때
+student1 <- read.table(file='student1.txt', sep="", header=T, stringsAsFactors = F)
+student1
+
+# 데이터가 [Tab]이 아닌 다른 문자로 구분되어 있을 때
+student2 <- read.table(file='student2.txt', sep=";", header=T, stringsAsFactors = F)
+student2
+
+# 파일 탐색기에서 직접 선택
+student1_2 <- read.table(file=file.choose(), sep="", header=T, stringsAsFactors = F)
+student1_2
+
+student2; head(student2,2); tail(student2,2)
+```
+#### tibble 라이브러리를 이용하여 tibble data frame으로 표현
+```{r}
+# install.packages('tibble')
+library(tibble)
+
+iris_df <- iris
+
+(iris_df1 <- as_tibble(iris_df))
+```
+```{r eval=F}
+?vignette
+vignette('tibble')
+```
+#### 결측 데이터를 처리해서 불러오기
+```{r}
+(student3 <- read.table(file='data\\student3.txt',
+                       sep=" ", header=T,
+                       na.strings="-"))  # '-'가 NA로 변환됨
+
+(student4 <- read.table(file='data\\student4.txt',
+                       sep=",", header=T,
+                       na.strings=c("-","+","$")))  # '-'가 NA로 변환됨
+```
+### **Excel 파일**
+```{r}
+library(xlsx)
+studentex <- read.xlsx(file='data\\studentexcel.xlsx',
+                        sheetIndex=1, encoding="UTF-8")
+studentex
+```
+#### 연습
+1) USArrests 데이터에서 
+```{r}
+USArrests_df <- USArrests
+USArrests_df$ratio_mp <- USArrests_df$Murder/USArrests_df$UrbanPop
+USArrests_df <- USArrests_df[order(USArrests_df$ratio_mp, decreasing=T),]
+USArrests_df <- tibble::rownames_to_column(USArrests_df)
+
+result <- head(USArrests_df,7)
+barplot(result$ratio_mp,
+        main="인구밀도대비 살인률",
+        names.arg=result$rowname,
+        xlab='state',
+        ylab='murder/pop',
+        col=rainbow(7),
+        cex.main=2
+        )
+```
+
+> ## **RegExpR**
+정규표현식을 이용한 문자열 처리
+
+```{r}
+# install.packages('stringr')
+library(stringr)
+```
+형식) str_extract('문자열', '정규표현식'), 결과 데이터는 list 구조
+```{r}
+str_extract("홍길동35이순신45유관순25", "[0-9]{2}")     # 맨 처음 등장하는 연속된 숫자 2개
+str_extract_all("홍길동35이순신45유관순25", "[0-9]{2}") # 모든 연속된 숫자 2개
+unlist(str_extract_all("홍길동35이순신45유관순25", "[0-9]{2}"))
+```
+[실습] 반복수를 지정하여 영문자를 추출
+```{r}
+string <- 'hongkildong105lee1002you25강감찬2005'
+str_extract_all(string, '[a-z]{3}')   # 3자
+str_extract_all(string, '[a-z]{3,}')  # 3자 이상
+str_extract_all(string, '[a-z]{3,5}') # 3~5자
+
+string1 <- 'YEShongkildong105lee1002you25강감찬2005'
+str_extract_all(string1, '[A-z]{3}')  # 3자(대문자 포함)
+```
+[실습] 한글, 영문자, 숫자 추출하기
+```{r}
+str_extract_all(string,'hong')
+str_extract_all(string,'25')
+str_extract_all(string,'[가-힣]{3}')
+```
+[실습] 한글, 영문자, 숫자를 제외한 나머지 추출하기
+```{r}
+string1 <- 'YEShongkildong105lee1002you25강감찬2005'
+jumin <- '123456-3234567654321-3589621'
+
+# 소문자를 제외하고 추출
+str_extract_all(string1, '[^a-z]{1,}')
+# 소문자를 제외한 4연속 문자 추출
+str_extract_all(string1, '[^a-z]{4}')
+# 한글을 제외한 5연속 문자 추출
+str_extract_all(string1, '[^가-힣]{5}')
+# 주민번호 형식에 맞게 추출해서 data frame화
+df_jumin <- data.frame(jumin=unlist(str_extract_all(jumin,'[0-9]{6}-[0-9]{7}')))
+df_jumin
+```
+[실습] 지정된 길이의 단어 추출하기
+```{r}
+name <- '홍길동1234,이순신5678,강감찬1012'
+# 이름과 학번으로 분리해서 data frame화
+df_student <- data.frame(name=unlist(str_extract_all(name,'[가-힣]{2,5}')),
+                         studentID=unlist(str_extract_all(name,'[0-9]{4}')))
+df_student
+```
+문자 대체하기
+```{r}
+gsub('영','0','홍영기')
+```
+
+
+```{r}
+mat <- matrix(1:6, ncol=2)
+mat
+
+a <- data.frame(mat, 7:9)
+a   # c(7:9)를 이어붙임
+
+b <- as.data.frame(mat, 7:9)
+b   # c(7:9)가 행 이름이 됨
+```
