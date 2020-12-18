@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+<title>{% block title %}Books Application Site{% endblock %}</title>
+
+{% block sidebar %}
+{{ block.super }} <!-- base.html의 block sidebar를 사용 -->
+<ul>
+    <li><a href="/books/">Books_Home</a></li>
+</ul>
+{% endblock %}
