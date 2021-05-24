@@ -67,7 +67,8 @@ FLASHGAME <<- "플래시게임"
 GREENREVIEW <<- "그린리뷰"
 ADSCONTACT <<- "광고문의"
 
-
+client_id <- "aQ2Jmueot4FBm2rv1DT2"
+client_secret <- "8LO9jN8EDB"
 
 # saved special defines --------------------
 
@@ -109,12 +110,8 @@ get_blogData <- function(WORD, START_PAGE, TYPE){
   param_rest <- paste("&display=100&start=",n,"&sort=sim",sep="")
   
   url <- paste(url, param_query, param_rest, sep="")
-  client_id <- "aQ2Jmueot4FBm2rv1DT2"
-  client_secret <- "8LO9jN8EDB"
-  response <- httr::GET(url,
-                        add_headers("X-Naver-Client-Id"=client_id,
-                                    "X-Naver-Client-Secret"=client_secret))
-  
+  response <- httr::GET(url, add_headers("X-Naver-Client-Id"=client_id,
+                                         "X-Naver-Client-Secret"=client_secret))
   rescode <- rawToChar(response$content)
   Encoding(rescode) <- "UTF-8"
   
@@ -153,8 +150,8 @@ tf_month <- function(MONTH) {
   )
 }
 
-# 유의미할 것 같은 데이터로 변환하는 func
-glaemfdj <- function(RAWDATA, PATTERN){
+# 본문 스크래핑 후 유의미할 것 같은 데이터로 변환하는 func
+get_blogDataContents <- function(RAWDATA, PATTERN){
   # (kw: keyword, t: title, d: description, m: main-container, p: paragraph, w: word)
   # postdate2   작성일(날짜 형식으로 변환됨)
   # cnt_kw_t    글 제목에서 키워드 수
@@ -316,12 +313,12 @@ get_blogDataSet <- function(KEYWORD){
   cat(1,"API 요청\n")
   blogData <- get_blogData(KEYWORD, 1, JSON)
   cat(1,"데이터 분석\n")
-  blogData <- glaemfdj(blogData, KEYWORD)
+  blogData <- get_blogDataContents(blogData, KEYWORD)
   for (idx in 2:10){
     cat(idx,"API 요청\n")
     rest <- get_blogData(KEYWORD, idx, JSON)
     cat(idx,"데이터 분석\n")
-    rest <- glaemfdj(rest, KEYWORD)
+    rest <- get_blogDataContents(rest, KEYWORD)
     blogData$items <- rbind(blogData$items, rest$items)
   }
   blogData$items$score <- (1+blogData$total-1:length(blogData$items$title))/blogData$total
